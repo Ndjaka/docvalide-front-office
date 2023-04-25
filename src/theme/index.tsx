@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { createTheme,responsiveFontSizes,ThemeProvider } from '@mui/material/styles';
+import { createTheme,ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
-
 
 import palette from './palette';
 import typography from './typography';
 import components from './components';
 import breakpoints from './breakpoints';
-
 
 interface ThemeCustomizationProps {
     children?: React.ReactNode;
@@ -22,7 +20,7 @@ export default function ThemeCustomization({ children } :ThemeCustomizationProps
     typography,
     components
   });
-  theme = responsiveFontSizes(theme)
+ // theme = responsiveFontSizes(theme)
 
   return (
       <StyledEngineProvider injectFirst>
