@@ -84,6 +84,16 @@ const components: Components = {
                 width: '100%'
             }
         }
+    },
+    MuiAppBar:{
+        defaultProps: {
+            elevation:0
+        },
+        styleOverrides:{
+            root:{
+                position:'relative'
+            }
+        }
     }
 }
 

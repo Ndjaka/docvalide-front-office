@@ -1,9 +1,9 @@
 import {Typography} from "@mui/material/styles/createTypography";
 import palette from "./palette";
-import theme from "./index";
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
+
 
 const typography : Partial<Typography> = {
     htmlFontSize:16,
@@ -32,8 +32,8 @@ const typography : Partial<Typography> = {
         fontSize: "3rem",
         lineHeight: 1.33,
         color: palette?.text?.primary,
-        // [theme.breakpoints.down(sm)]: {
-        //     fontSize: 1.55rem,
+        // [breakpoints?.down("sm")]: {
+        //     fontSize: "1.55rem",
         // }
     },
     h4: {
@@ -50,7 +50,7 @@ const typography : Partial<Typography> = {
         fontFamily: "Montserrat",
         fontStyle: "normal",
         fontWeight: 400,
-        fontSize: "2.125rem",
+        fontSize: "1.125rem",
         lineHeight: 0.66,
         color: palette?.text?.primary
     },

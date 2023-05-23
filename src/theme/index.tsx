@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createTheme,ThemeProvider } from '@mui/material/styles';
+import { createTheme,ThemeProvider,responsiveFontSizes } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
 
 import palette from './palette';
@@ -12,19 +12,20 @@ interface ThemeCustomizationProps {
     children?: React.ReactNode;
 }
 
-export default function ThemeCustomization({ children } :ThemeCustomizationProps) {
-
-  let theme = createTheme({
+ let themeCustomized = createTheme({
     breakpoints,
     palette,
     typography,
     components
-  });
- // theme = responsiveFontSizes(theme)
+});
+
+themeCustomized = responsiveFontSizes(themeCustomized)
+
+export default function ThemeCustomization({ children } :ThemeCustomizationProps) {
 
   return (
       <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={theme}>
+          <ThemeProvider theme={themeCustomized}>
               <CssBaseline />
               {children}
           </ThemeProvider>

@@ -18,11 +18,16 @@ function Header() {
     return (
         <>
             <Navigation mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
-            <AppBar  component={"nav"} sx={{
-                height: 76,
-                width: '100%',
-            }}>
-                <Toolbar >
+            <AppBar
+                component={"nav"}
+                position={"relative"}
+                sx={{
+                    height: 76,
+                    width: '100%'
+            }}
+                elevation={0}
+            >
+                <Toolbar>
                     <Container maxWidth={'lg'}>
                         <Box sx={{
                             mt: '20px',
