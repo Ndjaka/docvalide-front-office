@@ -26,7 +26,7 @@ interface LayoutStepProps {
     stepData:StepDataProps[];
     header: HeaderProps;
     onBack: () => void;
-    onNext: (e:Event) => void;
+    onNext: () => void;
 }
 
 function LayoutStep(props: LayoutStepProps) {

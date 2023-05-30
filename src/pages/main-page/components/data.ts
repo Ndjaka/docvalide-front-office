@@ -1,107 +1,107 @@
-import { ChoiceTypes } from '../../../types/choiceTypes';
 
-const choiceDatas : ChoiceTypes[] = [
+
+const choiceDatas  = [
     {
         id: 1,
-        label: 'Copie certifié conforme de la CNI',
+        designation: 'Copie certifié conforme de la CNI',
         price: '2500 FCFA',
         type: 'CERTIFIED_COPY',
         selected:false
     },
     {
         id:2,
-        label: 'Copie certifié conforme du baccalaureat',
+        designation: 'Copie certifié conforme du baccalaureat',
         price: '2100 FCFA',
         type: 'COPY_CERTIFIED',
         selected:false
     },
     {
         id: 3,
-        label: 'Copie certifié conforme du DUT',
+        designation: 'Copie certifié conforme du DUT',
         price: '2100 FCFA',
         type: 'COPY_CERTIFIED',
         selected:false
     },
     {
         id: 4,
-        label: 'Copie certifié conforme du BTS',
+        designation: 'Copie certifié conforme du BTS',
         price: '2100 FCFA',
         type: 'COPY_CERTIFIED',
         selected:false
     },
     {
         id: 5,
-        label: 'Copie certifié conforme de la Licence',
+        designation: 'Copie certifié conforme de la Licence',
         price: '2100 FCFA',
         type: 'COPY_CERTIFIED',
         selected:false
     },
     {
         id: 6,
-        label: 'Copie certifié conforme de l\'acte de naissance',
+        designation: 'Copie certifié conforme de l\'acte de naissance',
         price: '2500 FCFA',
         type: 'COPY_CERTIFIED',
         selected:false
     },
     {
         id: 7,
-        label: 'Attestation de l\'original du baccalaureat',
+        designation: 'Attestation de l\'original du baccalaureat',
         price: '3000 FCFA',
         type: 'ATTESTATION',
         selected:false
     },
     {
         id: 8,
-        label: 'Attestation de l\'original du DUT',
+        designation: 'Attestation de l\'original du DUT',
         price: '3000 FCFA',
         type: 'ATTESTATION',
         selected:false
     },
     {
         id: 9,
-        label: 'Attestation de la licence',
+        designation: 'Attestation de la licence',
         price: '3000 FCFA',
         type: 'ATTESTATION',
         selected:false
     },
     {
         id: 10,
-        label: 'Certificat de nationalité',
+        designation: 'Certificat de nationalité',
         price: '3500 FCFA',
         type: 'ATTESTATION',
         selected:false
     },
     {
         id: 11,
-        label: 'Attestation de l\'original du BTS',
+        designation: 'Attestation de l\'original du BTS',
         price: '3000 FCFA',
         type: 'ATTESTATION',
         selected:false
     },
     {
         id: 12,
-        label: 'Certificat de toise',
+        designation: 'Certificat de toise',
         price: '2000 FCFA',
         type: 'CERTIFICATE',
         selected:false
     },
     {
         id: 13,
-        label: 'Fiche de concours à télécharger et à timbrée',
+        designation: 'Fiche de concours à télécharger et à timbrée',
         price: '2500 FCFA',
         type: 'OTHERS',
         selected:false
     },
     {
         id: 14,
-        label: 'Photo 4 x 4',
+        designation: 'Photo 4 x 4',
         price: '1000 FCFA',
         type: 'OTHERS',
         selected:false
     },
     {
         id: 15,
-        label: 'Fiche de renseignement',
+        designation: 'Fiche de renseignement',
         price: '100 FCFA',
         type: 'OTHERS',
         selected:false

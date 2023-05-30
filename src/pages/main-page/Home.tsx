@@ -1,4 +1,4 @@
-import React, {Fragment, useRef} from 'react';
+import React, {Fragment, useCallback, useRef} from 'react';
 import {Box, Container, Typography, Grid} from '@mui/material';
 import Choice from './components/Choice';
 import LayoutStep from './components/LayoutStep';
@@ -9,22 +9,25 @@ import {virtualize} from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
 import ChoiceEnum from '../../enums/choiceEnum';
 import MyChoices from './components/MyChoices';
-import { stepData } from './components/data';
+import {stepData} from './components/data';
 import MyDocuments from './components/drop-document/MyDocuments';
-import { ChoiceTypes } from '../../types/choiceTypes';
+import Payments from './components/payment/Payments';
+import {DocumentTypes} from '../../types/DocumentTypes';
+import DocumentEnum from '../../enums/DocumentEnum';
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+
 function Home() {
 
     const [activeStep, setActiveStep] = React.useState({
-        index: 2 ,
+        index: 4,
         choiceTitle: ChoiceEnum.Legalization
     });
-    const [myDocuments, setMyDocuments] = React.useState<ChoiceTypes[]>([]);
+    const [myDocuments, setMyDocuments] = React.useState<DocumentTypes[]>([]);
 
     const buttonRef = useRef<HTMLButtonElement>(null);
 
-    const handleNext = (e : Event) => {
+    const handleNext = (e: Event) => {
         // console.log(buttonRef?.current);
         // e.preventDefault();
         // e.stopPropagation();
@@ -33,7 +36,9 @@ function Home() {
         setActiveStep(prevState => ({
             index: prevState.index + 1,
             choiceTitle: prevState.choiceTitle
-        }))
+        }));
+
+       // changeStatusOfDocumentIfIsEmpty();
     };
 
     const handleBack = () => {
@@ -42,6 +47,46 @@ function Home() {
             choiceTitle: prevState.choiceTitle
         }))
     }
+
+    /**
+     * Toggles the document item based on its selected status.
+     *
+     * @param {DocumentTypes} value - The document item to toggle.
+     */
+
+    const toggleDocumentItem = (value: DocumentTypes) => {
+        setMyDocuments(prevState => {
+            let choicesUpdated = [...prevState];
+            const index = choicesUpdated.findIndex(document => document.id === value.id);
+
+            if (value.selected) {
+                if (index !== -1) {
+                    choicesUpdated[index] = value;
+                } else {
+                    choicesUpdated.push(value);
+                }
+            } else if (index !== -1) {
+                choicesUpdated.splice(index, 1);
+            }
+
+            return choicesUpdated;
+        });
+    };
+
+    /**
+     * Changes the status of a document if it is empty.
+     *
+     */
+    const changeStatusOfDocumentIfIsEmpty = () => {
+        setMyDocuments(prevState => {
+            return prevState.map(document => {
+                if(document.docStatus === DocumentEnum.DEFAULT ) {
+                    return { ...document, docStatus: DocumentEnum.ERROR };
+                }
+                return document;
+            })
+        });
+    };
 
     return (
         <Container
@@ -54,12 +99,12 @@ function Home() {
             }}
         >
             <VirtualizeSwipeableViews
-             //   disabled={true}
+                //   disabled={true}
                 index={activeStep.index}
                 slideRenderer={({index, key}) => (
                     <Fragment key={key}>
 
-                        <Box  sx={{
+                        <Box sx={{
                             display: index === 0 ? 'block' : 'none',
                             height: '100%'
                         }}>
@@ -70,7 +115,7 @@ function Home() {
                             }))}/>
                         </Box>
 
-                        <Box  sx={{
+                        <Box sx={{
                             display: index !== 0 ? 'block' : 'none',
                             overflow: 'hidden'
                         }}>
@@ -81,30 +126,47 @@ function Home() {
                                 header={{
                                     start: 1,
                                     end: 4,
-                                    name: "Mes informations"
+                                    name: activeStep.choiceTitle
                                 }}
                                 onBack={handleBack}
                                 onNext={handleNext}
                             >
                                 <Box
-                                     sx={{ display: index === 1 ? 'block' : 'none'}}
+                                    sx={{display: index === 1 ? 'block' : 'none'}}
                                 >
                                     <MyInformations
                                         buttonRef={buttonRef}
-                                        onSubmit={(values)=>console.log("Home --> ", values)}
+                                        onSubmit={(values) => {
+                                        }}
                                     />
                                 </Box>
                                 <Box
-                                    sx={{ display: index === 2 ? 'block' : 'none' }}>
-                                    <MyChoices onChoiceSelected={(value) => setMyDocuments(prevState => [...prevState , value]) }/>
+                                    sx={{display: index === 2 ? 'block' : 'none'}}>
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <Typography variant={'h5'}>Veuillez sélectionner les documents à
+                                                légaliser</Typography>
+                                        </Grid>
+                                    </Grid>
+                                    <Box sx={{height: 'calc(100vh - 76px - 64px - 64px - 64px - 64px)'}}>
+                                        <MyChoices onAddDocument={toggleDocumentItem}/>
+                                    </Box>
+                                    <MyChoices onAddDocument={toggleDocumentItem}/>
                                 </Box>
-                                <Box   sx={{
+                                <Box sx={{
                                     display: index === 3 ? 'block' : 'none'
                                 }}>
                                     <MyDocuments
-                                        data={myDocuments}
-                                        onChangeDocument={(values) => console.log("Home::MyDocuments",values)}
+                                        myDocuments={myDocuments}
+                                        setMyDocuments={setMyDocuments}
+                                        onChangeDocument={(values) => console.log("Home::MyDocuments", values)}
                                     />
+                                </Box>
+                                <Box sx={{
+                                    display: index === 4 ? 'block' : 'none',
+                                    marginTop : "20px"
+                                }}>
+                                    <Payments/>
                                 </Box>
                             </LayoutStep>
                         </Box>

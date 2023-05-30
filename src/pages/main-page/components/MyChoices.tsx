@@ -1,36 +1,52 @@
 import {Box, Typography,Checkbox, Grid, Button } from '@mui/material';
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import palette from '../../../theme/palette';
 import { choiceDatas } from './data';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MyChoicesItems from './MyChoiceItems';
-import { ChoiceTypes } from '../../../types/choiceTypes';
+import { DocumentTypes } from '../../../types/DocumentTypes';
+import { ChoiceTypes } from '../../../types/ChoiceTypes';
+import DocumentEnum from '../../../enums/DocumentEnum';
 
 interface MyChoicesProps {
-    onChoiceSelected: (value:ChoiceTypes) => void;
+    onAddDocument: (value:DocumentTypes) => void;
+
 
 }
 function MyChoices(props:MyChoicesProps) {
-    const {onChoiceSelected} = props;
+    const {onAddDocument} = props;
     const [choices, setChoices] = React.useState<ChoiceTypes[]>(choiceDatas);
+
 
     /**
      * Handles changes to a choice item.
-     * @param {React.ChangeEvent<HTMLInputElement>} event - The event object generated when the input element is changed.
      * @param {ChoiceTypes} value - The choice item to be updated.
      */
-    const handleChangeItem = (event: React.ChangeEvent<HTMLInputElement>, value: ChoiceTypes) => {
+    const handleChangeItem = useCallback((value: ChoiceTypes) => {
         setChoices(prevState => {
-            return prevState.map(choice => {
-                if (choice.id === value.id) {
-                    choice.selected = event.target.checked;
-                    onChoiceSelected(choice);
-                }
-                return choice;
-            });
+            const updatedChoices = [...prevState];
+            const index = updatedChoices.findIndex(choice => choice.id === value.id);
+
+            if (index !== -1) {
+                updatedChoices[index] = {
+                    ...updatedChoices[index],
+                    selected: !value.selected
+                };
+
+                onAddDocument({
+                    ...updatedChoices[index],
+                    docStatus: DocumentEnum.DEFAULT
+                } as DocumentTypes);
+            }
+
+            return updatedChoices;
         });
-    };
+    }, [onAddDocument]);
+
+
+
+
 
     return (
         <Box >
@@ -42,10 +58,10 @@ function MyChoices(props:MyChoicesProps) {
                     choices.map((value) => (
                         <Grid item xs={12} sm={6} md={4} lg={4} key={value.id}>
                             <MyChoicesItems
-                                isSelected={value.selected}
-                                label={value.label}
-                                price={value.price}
-                                onChangeItem={(e) => handleChangeItem(e, value)}
+                                isSelected={value?.selected}
+                                designation={value?.designation}
+                                price={value?.price}
+                                onChangeItem={() => handleChangeItem(value)}
                             />
                         </Grid>
                     ))

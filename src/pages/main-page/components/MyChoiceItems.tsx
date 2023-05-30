@@ -3,16 +3,18 @@ import palette from '../../../theme/palette';
 import React from 'react';
 
 interface MyChoicesItemsProps {
-    isSelected : boolean ,
-    label : string,
-    price : string,
-    onChangeItem : ( event: React.ChangeEvent<HTMLInputElement>) => void
+    isSelected? : boolean ,
+    designation? : string,
+    price? : string,
+    onChangeItem : ( ) => void
 }
 const MyChoicesItems = (props: MyChoicesItemsProps) => {
 
-    const {isSelected = false, label, price, onChangeItem} = props;
+    const {isSelected = false, designation, price, onChangeItem} = props;
 
-    return <Box sx={{
+    return <Box
+        onClick={onChangeItem}
+        sx={{
         borderRadius: '4px',
         border: `2px solid ${isSelected ? palette?.primary?.main : palette?.secondary?.dark}`,
         paddingX: '2px',
@@ -21,7 +23,8 @@ const MyChoicesItems = (props: MyChoicesItemsProps) => {
         height : '110px',
         display:'flex',
         alignItems: 'flex-start',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        cursor: 'pointer'
     }} >
         <Checkbox
             color="primary"
@@ -35,7 +38,6 @@ const MyChoicesItems = (props: MyChoicesItemsProps) => {
                 '& .MuiSvgIcon-root': { fontSize: 18 }
             }}
             inputProps={{ 'aria-label': 'controlled' }}
-            onChange={onChangeItem}
             checked={isSelected}
         />
         <Typography
@@ -48,7 +50,7 @@ const MyChoicesItems = (props: MyChoicesItemsProps) => {
                 marginBottom:'5px'
             }}
         >
-            {label}
+            {designation}
         </Typography>
         <Box sx={{
             marginTop: 'auto',

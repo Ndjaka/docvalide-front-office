@@ -3,10 +3,10 @@ import React , {useState} from 'react';
 import Dropzone, { useDropzone } from 'react-dropzone';
 import palette from '../../../../theme/palette';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import { ChoiceTypes } from '../../../../types/choiceTypes';
-import fileToBase64 from '../../../../utils/fileUtils';
 import LegalizationType from '../../../../types/legalizationTypes';
 import { DocumentTypes } from '../../../../types/DocumentTypes';
+import DocumentEnum from '../../../../enums/DocumentEnum';
+import fileToBase64 from '../../../../utils/fileUtils';
 
 const dropStatus = {
     "success" : "green",
@@ -15,28 +15,27 @@ const dropStatus = {
 };
 
 interface MyDropzoneProps {
-    data : ChoiceTypes;
+    data : DocumentTypes;
     onChange : (document : DocumentTypes) => void;
     isAllSelected?: boolean;
 }
 
 function MyDropzone(props : MyDropzoneProps ) {
 
-    const [color, setColor] = useState<string>(dropStatus["default"]);
-
     const { data , onChange , isAllSelected = false } = props;
+
+    const color = dropStatus[data.docStatus as DocumentEnum];
     const addLegalization = async (file : File) => {
 
         onChange(
             {
-                fileName: file.name,
                 fileUrl:  await fileToBase64(file),
-                designation : data.label,
+                designation : data.designation,
+                fileName: file.name,
+                price: data.price,
                 id: data.id
             }
         );
-        
-        setColor(dropStatus["success"]);
     };
  
     return (
@@ -78,12 +77,19 @@ function MyDropzone(props : MyDropzoneProps ) {
                             sx={{
                                 textAlign:'center',
                                 lineHeight: 1.5,
+                                fontWeight: 'bold',
                             }}
                         >
-                            {data.label}
+                            {data.designation}
                         </Typography>
-                        {/*<Typography my={'2px'} variant={"overline"} color={dropStatus()}>Vous pouvez glisser et déposer votre document ou cliquer pour sélectionner un fichier.</Typography>*/}
-                        {/*<Typography variant={"overline"} color={dropStatus()}>( Seuls les fichiers au format PDF sont acceptés. )</Typography>*/}
+                        <Typography
+                            textAlign={"center"}
+                            my={'9px'}
+                            variant={"caption"}
+                            color={color}
+                        >
+                            Cliquez pour ajouter votre document.
+                        </Typography>
 
                     </Box>
                 </Box>

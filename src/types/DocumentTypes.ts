@@ -1,8 +1,11 @@
-export interface DocumentTypes
+import DocumentEnum from "../enums/DocumentEnum";
+import { ChoiceTypes } from "../types/ChoiceTypes";
+
+
+export interface DocumentTypes extends ChoiceTypes
 {
         fileName : string,
         fileUrl : string,
-        designation : string,
-        id: number
+        docStatus?  : DocumentEnum
 
 }

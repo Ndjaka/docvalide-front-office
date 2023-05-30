@@ -117,7 +117,7 @@ const typography : Partial<Typography> = {
         fontStyle: "normal",
         fontWeight: 400,
         fontSize: "0.75rem",
-        lineHeight: 0.75,
+        lineHeight: 0.8125,
         letterSpacing: "0.4px",
         color: palette?.text?.primary
     },
@@ -128,7 +128,8 @@ const typography : Partial<Typography> = {
         fontSize: "0.625rem",
         lineHeight: 1.6,
         letterSpacing: "1.5px",
-        color: palette?.text?.primary
+        color: palette?.text?.primary,
+        textTransform: "math-auto"
     }
 
 };
