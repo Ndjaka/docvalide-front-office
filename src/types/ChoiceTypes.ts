@@ -1,7 +1,7 @@
 export interface ChoiceTypes {
     id?: number,
     designation?:string,
-    price?: string,
+    price?: number,
     type?: string,
     selected?: boolean,
 }

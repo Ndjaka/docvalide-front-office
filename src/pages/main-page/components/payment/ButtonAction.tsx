@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import React from 'react';
 import palette from '../../../../theme/palette';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
@@ -7,18 +7,24 @@ import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 interface ButtonActionProps {
     onReduce:()=>void;
     onIncrease:()=>void;
-    quantity: number;
+    quantity?: number;
+    price?: number;
 
 }
 function ButtonAction(props: ButtonActionProps) {
-    const { onReduce, onIncrease, quantity = 0} = props;
+    const { onReduce, onIncrease, quantity = 0 , price = 0} = props;
     return (
 
         <Box
-            display={"flex"}
+            sx={{
+                display:'flex' ,
+                flexDirection:'column'
+            }}
         >
+            <Box display={"flex"}>
             <IconButton
-                onClick={onReduce}
+                
+                onClick={()=> quantity === 1 ? {} : onReduce() }
                 size="small"
                 aria-label="remove"
                 color="primary"
@@ -66,6 +72,19 @@ function ButtonAction(props: ButtonActionProps) {
             >
                 <AddSharpIcon />
             </IconButton>
+            </Box>
+            <Typography
+                variant={"overline"}
+                sx={{
+
+                    mt:'7px',
+                    color:"red",
+                    textAlign:"center",
+                    fontWeight:"bold"
+                }}
+            >
+                {Boolean(price) && `${price} CFA`}
+            </Typography>
         </Box>
     );
 }

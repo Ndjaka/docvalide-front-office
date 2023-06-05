@@ -14,20 +14,23 @@ import MyDocuments from './components/drop-document/MyDocuments';
 import Payments from './components/payment/Payments';
 import {DocumentTypes} from '../../types/DocumentTypes';
 import DocumentEnum from '../../enums/DocumentEnum';
+import PaymentTypes from '../../types/PaymentTypes';
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 function Home() {
 
     const [activeStep, setActiveStep] = React.useState({
-        index: 4,
+        index: 0,
         choiceTitle: ChoiceEnum.Legalization
     });
     const [myDocuments, setMyDocuments] = React.useState<DocumentTypes[]>([]);
 
+    const [paymentsData, setPaymentsData] = React.useState<PaymentTypes[]>([]);
+
     const buttonRef = useRef<HTMLButtonElement>(null);
 
-    const handleNext = (e: Event) => {
+    const handleNext = () => {
         // console.log(buttonRef?.current);
         // e.preventDefault();
         // e.stopPropagation();
@@ -124,9 +127,10 @@ function Home() {
                                 choiceLayoutPic={activeStep.choiceTitle === ChoiceEnum.Legalization ? legalization : extract}
                                 stepData={stepData}
                                 header={{
+                                    name: activeStep.choiceTitle,
                                     start: 1,
                                     end: 4,
-                                    name: activeStep.choiceTitle
+
                                 }}
                                 onBack={handleBack}
                                 onNext={handleNext}
@@ -142,16 +146,7 @@ function Home() {
                                 </Box>
                                 <Box
                                     sx={{display: index === 2 ? 'block' : 'none'}}>
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            <Typography variant={'h5'}>Veuillez sélectionner les documents à
-                                                légaliser</Typography>
-                                        </Grid>
-                                    </Grid>
-                                    <Box sx={{height: 'calc(100vh - 76px - 64px - 64px - 64px - 64px)'}}>
                                         <MyChoices onAddDocument={toggleDocumentItem}/>
-                                    </Box>
-                                    <MyChoices onAddDocument={toggleDocumentItem}/>
                                 </Box>
                                 <Box sx={{
                                     display: index === 3 ? 'block' : 'none'
@@ -159,14 +154,17 @@ function Home() {
                                     <MyDocuments
                                         myDocuments={myDocuments}
                                         setMyDocuments={setMyDocuments}
-                                        onChangeDocument={(values) => console.log("Home::MyDocuments", values)}
+                                        onChangeDocument={setPaymentsData}
                                     />
                                 </Box>
                                 <Box sx={{
                                     display: index === 4 ? 'block' : 'none',
                                     marginTop : "20px"
                                 }}>
-                                    <Payments/>
+                                    <Payments
+                                        payments={paymentsData}
+                                        setPayments={setPaymentsData}
+                                    />
                                 </Box>
                             </LayoutStep>
                         </Box>

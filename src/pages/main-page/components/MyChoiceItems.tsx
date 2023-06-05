@@ -5,7 +5,7 @@ import React from 'react';
 interface MyChoicesItemsProps {
     isSelected? : boolean ,
     designation? : string,
-    price? : string,
+    price? : number,
     onChangeItem : ( ) => void
 }
 const MyChoicesItems = (props: MyChoicesItemsProps) => {
@@ -56,7 +56,7 @@ const MyChoicesItems = (props: MyChoicesItemsProps) => {
             marginTop: 'auto',
             marginBottom: 0
         }}>
-            <Typography ml={'10px'} mb={'10px'} variant="body2" color={"#CC212D"} >{price}</Typography>
+            <Typography ml={'10px'} mb={'10px'} variant="body2" color={"#CC212D"} >{price} FCFA</Typography>
         </Box>
     </Box>
 }

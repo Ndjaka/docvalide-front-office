@@ -4,8 +4,8 @@ import { ChoiceTypes } from "../types/ChoiceTypes";
 
 export interface DocumentTypes extends ChoiceTypes
 {
-        fileName : string,
-        fileUrl : string,
+        fileName?: string,
+        fileUrl?: string,
         docStatus?  : DocumentEnum
 
 }

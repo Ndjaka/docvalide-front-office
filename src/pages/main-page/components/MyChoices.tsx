@@ -56,12 +56,13 @@ function MyChoices(props:MyChoicesProps) {
             >
                 {
                     choices.map((value) => (
-                        <Grid item xs={12} sm={6} md={4} lg={4} key={value.id}>
+                        <Grid item xs={12} sm={6} md={4} lg={4} >
                             <MyChoicesItems
-                                isSelected={value?.selected}
-                                designation={value?.designation}
-                                price={value?.price}
+                                key={value.id}
                                 onChangeItem={() => handleChangeItem(value)}
+                                designation={value?.designation}
+                                isSelected={value?.selected}
+                                price={value?.price}
                             />
                         </Grid>
                     ))

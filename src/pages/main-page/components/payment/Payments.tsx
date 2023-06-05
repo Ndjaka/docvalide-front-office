@@ -1,14 +1,88 @@
 import {Box, Button, Grid, Hidden, IconButton, Typography } from '@mui/material';
-import React, {Fragment} from 'react';
+import React, {Fragment, useCallback} from 'react';
 import palette from '../../../../theme/palette';
 import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
 import ButtonAction from './ButtonAction';
 import { DocumentTypes } from '../../../../types/DocumentTypes';
+import PaymentTypes from '../../../../types/PaymentTypes';
+import PaymentItems from './PaymentItems';
+import PaymentSummary from './PaymentSummary';
 
 interface PaymentsProps{
-    documents : DocumentTypes[];
+    payments : PaymentTypes[];
+    setPayments : React.Dispatch<React.SetStateAction<PaymentTypes[]>>;
+
 }
-function Payments() {
+function Payments(props:PaymentsProps) {
+    const {payments , setPayments} = props;
+
+    /**
+     * Reduce the quantity of the document
+     */
+    const onReduce = useCallback((value: PaymentTypes) => {
+            setPayments(prevState => {
+                return prevState.map(item => {
+                    if (item.id === value.id) {
+                        return {
+                            ...item,
+                            quantity: (item?.quantity as number - 1)
+                        }
+                    }
+                    return item;
+                })
+            });
+
+     },[payments]);
+
+    /**
+     * Increase the quantity of the document
+     */
+
+    const onIncrease = useCallback((value: PaymentTypes) => {
+
+
+             setPayments(prevState => {
+                 return prevState.map(item => {
+                     if (item.id === value.id) {
+                         return {
+                             ...item,
+                             quantity: (item?.quantity as number + 1)
+                         }
+                     }
+                     return item;
+                 })
+             });
+         
+     },[payments]);
+
+    /**
+     * Calculate the total amount of the document
+     * @returns {totalAmount : number , commissionCosts : number}
+     *
+     */
+    const totalAmountOfDocument = () => {
+
+         const COMMISION_COSTS = [3000 , 1500];
+
+         const totalQuantity = payments.reduce((acc,curr) =>  acc + (curr?.quantity as number),0);
+
+         const totalDocument = payments.length;
+
+         const totalAmount = payments.reduce((acc,curr) => acc + (curr?.quantity as number) * (curr?.price as number),0);
+
+         if(totalDocument >= 3 || totalQuantity >= 3){
+                return {
+                    totalAmount : totalAmount + COMMISION_COSTS[0],
+                    commissionCosts : COMMISION_COSTS[0]
+                };
+         }else{
+                return  {
+                    totalAmount : totalAmount + COMMISION_COSTS[1],
+                    commissionCosts : COMMISION_COSTS[1]
+                };
+         }
+     }
+     
     return (
         <Grid container
               spacing={1}
@@ -35,47 +109,13 @@ function Payments() {
                   }}
             >
             {
-                Array.from({length: 10}, (_, i) => i + 1)
-                    .map(value => {
-                    return <Fragment>
-                        <Box sx={{
-                            width: '100%',
-                            border: '1px solid #D5D9DC',
-                            py: '13px',
-                            px: '5px'
-                        }}>
-                            <Box sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                            }}>
-                                <Box sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <PictureAsPdfSharpIcon
-                                        sx={{
-                                            fontSize: '30px',
-                                            color: palette?.primary?.main
-                                        }}
-                                    />
-                                    <Typography
-                                        ml={"6px"}
-                                        variant={"overline"}
-                                    >
-                                        Attestation de reuissite du baccalaureat
-                                    </Typography>
-                                </Box>
-                                <ButtonAction
-                                    onReduce={() => {
-                                    }}
-                                    onIncrease={() => {
-                                    }}
-                                    quantity={1}
-                                />
-                            </Box>
-                        </Box>
-                    </Fragment>
+                payments.map(value => {
+                    return <PaymentItems
+                        key={value.id}
+                        data={value}
+                        onReduce={onReduce}
+                        onIncrease={onIncrease}
+                    />
                 })
 
             }
@@ -86,81 +126,10 @@ function Payments() {
                   sm={6}
                   lg={4}
             >
-                <Box sx={{
-                    width : '100%',
-                    border : '1px solid #D5D9DC',
-                    pt: '13px',
-                    paddingX: '5px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: {lg:'124px', xs:'66px'},
-                    pb: '3px',
-                    mb: '10px'
-
-                }}>
-                    <Typography
-                        variant={"overline"}
-                        textAlign="end"
-                        sx={{
-                            fontWeight : 'bold'
-                        }}
-                    >
-                        Recaputilatif de paiement
-                    </Typography>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: {lg:'column' , xs:'row'},
-                        justifyContent: { lg:'flex-end' , xs:'space-between'},
-                        mb:0,
-                        mt:'auto'
-
-                    }}>
-                        <Box sx={{
-                            display:'flex',
-                            flexDirection:  'column',
-                            alignItems:'flex-end'
-                        }}>
-                            <Typography
-                                sx={{ fontWeight : 'bold' }}
-                                variant={"overline"}>
-                                Frais de commission
-                            </Typography>
-                            <Typography
-                                variant={"overline"}
-                                color={"red"}
-                                sx={{
-                                    fontWeight : 'bold'
-                                }}
-                            >3000 FCFA</Typography>
-                        </Box>
-                        <Box sx={{
-                            display:'flex',
-                            flexDirection: 'column',
-                            alignItems:'flex-end',
-                            mt:{ lg:'10px' , xs:0}
-                        }}>
-                            <Typography
-                                sx={{ fontWeight : 'bold' }}
-                                variant={"overline"}>
-                                Total
-                            </Typography>
-                            <Typography
-                                sx={{ fontWeight : 'bold' }}
-                                variant={"overline"}
-                                color={"red"}>3000 FCFA</Typography>
-                        </Box>
-                    </Box>
-
-                </Box>
-                <Hidden smDown>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                >
-                    Payer
-                </Button>
-                </Hidden>
+              <PaymentSummary
+                  commissionCosts={totalAmountOfDocument().commissionCosts}
+                  totalPaid={totalAmountOfDocument().totalAmount}
+              />
             </Grid>
 
         </Grid>

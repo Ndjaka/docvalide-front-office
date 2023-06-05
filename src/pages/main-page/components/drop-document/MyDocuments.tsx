@@ -6,12 +6,13 @@ import LegalizationType from '../../../../types/legalizationTypes';
 import removeDuplicates from '../../../../utils/arrayUtils';
 import {DocumentTypes} from '../../../../types/DocumentTypes';
 import DocumentEnum from '../../../../enums/DocumentEnum';
+import PaymentTypes from '../../../../types/PaymentTypes';
 
 
 interface MyDocumentsProps {
     myDocuments: DocumentTypes[];
     setMyDocuments : (doc: DocumentTypes[]) => void
-    onChangeDocument: (documents: DocumentTypes[]) => void;
+    onChangeDocument: (documents: PaymentTypes[]) => void;
 
 }
 
@@ -72,11 +73,20 @@ const MyDocuments = (props: MyDocumentsProps) => {
 
     useEffect(() => {
       if(documents.length !== 0) {
-          onChangeDocument(documents);
+          console.log({documents})
+          const docucmentToPayments :PaymentTypes[] =  documents.map((value) => ({
+              quantity : 1,
+              price : value.price,
+              fileUrl : value.fileUrl,
+              fileName : value.fileName,
+              designation: value.designation,
+              id : value.id
+          }));
+          onChangeDocument(docucmentToPayments);
       }
     },[documents, onChangeDocument]);
 
-
+    console.log({documents});
     return (
         <div>
             <Typography variant="overline">
