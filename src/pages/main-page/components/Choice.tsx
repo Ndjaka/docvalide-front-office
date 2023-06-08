@@ -2,7 +2,8 @@ import React from 'react';
 import {Box, Container, Typography,Grid } from '@mui/material';
 import extract from '../../../assets/Extrait.svg';
 import legalization from '../../../assets/Legalisation.svg';
-import  ChoiceEnum  from '../../../enums/choiceEnum';
+import ChoiceEnum from '../../../enums/choiceEnum';
+
 
 interface choiceProps {
     onClickChoice: (choiceTitle : ChoiceEnum) => void;

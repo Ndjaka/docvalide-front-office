@@ -33,7 +33,7 @@ const MyDocuments = (props: MyDocumentsProps) => {
 
         const documentIsFind = documents.find(document => document.id === newDocument.id) as DocumentTypes;
 
-        if (documentIsFind && documents.length !== 0) {
+        if (documentIsFind) {
             setDocuments(prevState => {
                 return prevState.map((document) => {
                     if (document.id === newDocument.id) {
