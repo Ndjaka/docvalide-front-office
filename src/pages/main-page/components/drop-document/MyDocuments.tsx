@@ -70,23 +70,24 @@ const MyDocuments = (props: MyDocumentsProps) => {
 
     },[myDocuments]);
 
-
     useEffect(() => {
-      if(documents.length !== 0) {
-          console.log({documents})
-          const docucmentToPayments :PaymentTypes[] =  documents.map((value) => ({
-              quantity : 1,
-              price : value.price,
-              fileUrl : value.fileUrl,
-              fileName : value.fileName,
-              designation: value.designation,
-              id : value.id
-          }));
-          onChangeDocument(docucmentToPayments);
-      }
-    },[documents, onChangeDocument]);
+        if (documents.length !== 0) {
+            const documentToPayments: PaymentTypes[] = documents
+              .filter((doc) => myDocuments.find((myDoc) => doc.id === myDoc.id))
+              .map((doc) => ({
+                  quantity: 1,
+                  price: doc.price,
+                  fileUrl: doc.fileUrl,
+                  fileName: doc.fileName,
+                  designation: doc.designation,
+                  id: doc.id,
+              }));
 
-    console.log({documents});
+            onChangeDocument(documentToPayments);
+            setDocuments(documentToPayments);
+        }
+    }, [documents, onChangeDocument, myDocuments]);
+
     return (
         <div>
             <Typography variant="overline">

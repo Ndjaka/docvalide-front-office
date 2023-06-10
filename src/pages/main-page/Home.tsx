@@ -1,8 +1,7 @@
-import React, {Fragment, useCallback, useRef} from 'react';
-import {Box, Container, Typography, Grid} from '@mui/material';
+import React, {Fragment, useRef} from 'react';
+import {Box, Container} from '@mui/material';
 import Choice from './components/Choice';
 import LayoutStep from './components/LayoutStep';
-import MyInformations from './components/MyInformations';
 import legalization from '../../assets/Legalisation.svg';
 import extract from '../../assets/Extrait.svg';
 import {virtualize} from 'react-swipeable-views-utils';
@@ -15,10 +14,11 @@ import Payments from './components/payment/Payments';
 import {DocumentTypes} from '../../types/DocumentTypes';
 import DocumentEnum from '../../enums/DocumentEnum';
 import PaymentTypes from '../../types/PaymentTypes';
+import MyInformations from "./components/MyInformations";
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
-function Home() {
+const Home = () => {
 
     const [activeStep, setActiveStep] = React.useState({
         index: 0,
@@ -173,6 +173,6 @@ function Home() {
             />
         </Container>
     );
-}
+};
 
 export default Home;

@@ -1,5 +1,5 @@
 import DocumentEnum from "../enums/DocumentEnum";
-import { ChoiceTypes } from "../types/ChoiceTypes";
+import { ChoiceTypes } from "./ChoiceTypes";
 
 
 export interface DocumentTypes extends ChoiceTypes
