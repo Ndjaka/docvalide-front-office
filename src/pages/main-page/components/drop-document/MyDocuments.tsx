@@ -1,9 +1,6 @@
 import {Box, Grid, Typography} from '@mui/material';
 import React, {useCallback, useEffect, useState} from 'react';
 import MyDropzone from './MyDropzone';
-import {choiceDatas} from '../data';
-import LegalizationType from '../../../../types/legalizationTypes';
-import removeDuplicates from '../../../../utils/arrayUtils';
 import {DocumentTypes} from '../../../../types/DocumentTypes';
 import DocumentEnum from '../../../../enums/DocumentEnum';
 import PaymentTypes from '../../../../types/PaymentTypes';
@@ -72,6 +69,7 @@ const MyDocuments = (props: MyDocumentsProps) => {
 
     useEffect(() => {
         if (documents.length !== 0) {
+
             const documentToPayments: PaymentTypes[] = documents
               .filter((doc) => myDocuments.find((myDoc) => doc.id === myDoc.id))
               .map((doc) => ({
@@ -83,10 +81,10 @@ const MyDocuments = (props: MyDocumentsProps) => {
                   id: doc.id,
               }));
 
-            onChangeDocument(documentToPayments);
             setDocuments(documentToPayments);
+            onChangeDocument(documentToPayments);
         }
-    }, [documents, onChangeDocument, myDocuments]);
+    }, [onChangeDocument, myDocuments]);
 
     return (
         <div>

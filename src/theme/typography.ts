@@ -129,7 +129,7 @@ const typography : Partial<Typography> = {
         lineHeight: 1.6,
         letterSpacing: "1.5px",
         color: palette?.text?.primary,
-        textTransform: 'math-auto'
+        textTransform: 'initial'
     }
 
 };
