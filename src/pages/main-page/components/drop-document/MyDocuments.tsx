@@ -113,4 +113,4 @@ const MyDocuments = (props: MyDocumentsProps) => {
     );
 }
 
-export default MyDocuments;
+export default React.memo(MyDocuments);

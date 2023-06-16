@@ -1,5 +1,5 @@
 import {Box, Button, Grid, Hidden, IconButton, Typography } from '@mui/material';
-import React, {Fragment, useCallback} from 'react';
+import React, { Fragment, useCallback, useMemo } from "react";
 import palette from '../../../../theme/palette';
 import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
 import ButtonAction from './ButtonAction';
@@ -7,14 +7,17 @@ import { DocumentTypes } from '../../../../types/DocumentTypes';
 import PaymentTypes from '../../../../types/PaymentTypes';
 import PaymentItems from './PaymentItems';
 import PaymentSummary from './PaymentSummary';
+import UserPayloadTypes from "../../../../types/UserPayloadTypes";
+import { LegalizationDocRequest } from "../../../../types/LegalizationPayloadTypes";
 
 interface PaymentsProps{
     payments : PaymentTypes[];
     setPayments : React.Dispatch<React.SetStateAction<PaymentTypes[]>>;
+    userInfos? : UserPayloadTypes;
 
 }
 function Payments(props:PaymentsProps) {
-    const {payments , setPayments} = props;
+    const {payments , setPayments, userInfos} = props;
 
     /**
      * Reduce the quantity of the document
@@ -39,7 +42,6 @@ function Payments(props:PaymentsProps) {
      */
 
     const onIncrease = useCallback((value: PaymentTypes) => {
-
 
              setPayments(prevState => {
                  return prevState.map(item => {
@@ -82,6 +84,25 @@ function Payments(props:PaymentsProps) {
                 };
          }
      }
+
+     const legalizationDocs : LegalizationDocRequest[] = useMemo(() => {
+        return payments.map(item => {
+            return {
+                quantity : item?.quantity as number,
+                fileUrl : item?.fileUrl as string,
+                fileName : item?.fileName as string,
+                designation : item?.designation as string,
+            }
+        })
+   },[payments]);
+    
+  /**
+   * Handles the payment of the documents
+   */
+
+  const handlePay = () => {
+        console.log('handlePay');
+   }
      
     return (
         <Grid container
@@ -105,7 +126,6 @@ function Payments(props:PaymentsProps) {
                       '&::-webkit-scrollbar-track': {
                           backgroundColor: '#f2f2f2',
                       }
-
                   }}
             >
             {
@@ -127,6 +147,7 @@ function Payments(props:PaymentsProps) {
                   lg={4}
             >
               <PaymentSummary
+                  onPay={handlePay}
                   commissionCosts={totalAmountOfDocument().commissionCosts}
                   totalPaid={totalAmountOfDocument().totalAmount}
               />
@@ -136,4 +157,4 @@ function Payments(props:PaymentsProps) {
     );
 }
 
-export default Payments;
+export default React.memo(Payments);

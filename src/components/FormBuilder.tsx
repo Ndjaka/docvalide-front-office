@@ -1,8 +1,8 @@
-import React, {forwardRef} from 'react';
+import React from 'react';
 import {Typography, Box, TextField, Grid, MenuItem, FormControl, Select, Button, GridProps} from '@mui/material';
-import {BaseTextFieldProps, OutlinedTextFieldProps} from "@mui/material/TextField/TextField";
+import {BaseTextFieldProps} from "@mui/material/TextField/TextField";
 import {MuiTelInput} from 'mui-tel-input'
-import {useFormik, Formik, FormikProps, FormikValues} from "formik";
+import { Formik, FormikProps, Form } from 'formik';
 import * as Yup from "yup";
 
 export interface FieldProps extends BaseTextFieldProps {
@@ -37,11 +37,9 @@ const  FormBuilder =(props : formProps) => {
             validationSchema={Yup.object().shape(validationSchema)}
             onSubmit={(values, actions) => {
                 onSubmit(values, actions);
-            }}
-
-        >
+            }}>
             {(formik) => (
-                <form  onSubmit={formik.handleSubmit}>
+                <Form>
                     <Grid container spacing={2}>
                         {
                             Field.map(({type = 'text', ...form}) => (
@@ -73,18 +71,17 @@ const  FormBuilder =(props : formProps) => {
                                             </Box>
                                         ) : ['phone'].indexOf(type) !== -1 ? (
                                             <Box style={{...form.style}}>
-                                        <Typography
-                                                mb={'3px'}
-                                                variant={'body1'}
-                                                color={'text.primary'}>
-                                                {form.label}
-                                            </Typography>
+                                                <Typography
+                                                    mb={'3px'}
+                                                    variant={'body1'}
+                                                    color={'text.primary'}>
+                                                    {form.label}
+                                                </Typography>
                                                 <MuiTelInput
                                                     required={form.required || false}
                                                     error={Boolean(formik.touched[String(form.name)] && formik.errors[String(form.name)])}
                                                     fullWidth
-                                                    helperText={
-                                                        <b>{formik.touched[String(form.name)] && (formik.errors[String(form.name)] as string)}</b>}
+                                                    helperText={<b>{formik.touched[String(form.name)] && (formik.errors[String(form.name)] as string)}</b>}
                                                     name={form?.name}
                                                     margin="dense"
                                                     size={"small"}
@@ -93,7 +90,8 @@ const  FormBuilder =(props : formProps) => {
                                                     value={formik.values[String(form.name)]}
                                                     variant="outlined"
                                                     focusOnSelectCountry
-                                                    defaultCountry={'CM'}/>
+                                                    defaultCountry={'CM'}
+                                                />
                                             </Box>
                                         ) : ['select'].indexOf(type) !== -1 ? (
                                              <Box style={{...form.style}}>
@@ -143,7 +141,7 @@ const  FormBuilder =(props : formProps) => {
                     </Grid>
                     {renderSubmit &&
                         renderSubmit(formik)}
-                </form>
+                </Form>
             )}
         </Formik>
     );

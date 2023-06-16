@@ -3,7 +3,7 @@ import React , {useState} from 'react';
 import Dropzone, { useDropzone } from 'react-dropzone';
 import palette from '../../../../theme/palette';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import LegalizationType from '../../../../types/legalizationTypes';
+import LegalizationType from '../../../../types/LegalizationTypes';
 import { DocumentTypes } from '../../../../types/DocumentTypes';
 import DocumentEnum from '../../../../enums/DocumentEnum';
 import fileToBase64 from '../../../../utils/fileUtils';

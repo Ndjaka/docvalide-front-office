@@ -66,4 +66,4 @@ function Steps(props: StepsProps) {
     );
 }
 
-export default Steps;
+export default React.memo(Steps);
