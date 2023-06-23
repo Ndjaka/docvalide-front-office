@@ -6,7 +6,6 @@ import legalization from '../../assets/Legalisation.svg';
 import extract from '../../assets/Extrait.svg';
 import ReactSwipableView from 'react-swipeable-views';
 import MyChoices from './components/MyChoices';
-import { stepData } from './components/data';
 import MyDocuments from './components/drop-document/MyDocuments';
 import Payments from './components/payment/Payments';
 import { DocumentTypes } from '../../types/DocumentTypes';
@@ -16,12 +15,17 @@ import MyInformations, { UserValues } from "./components/MyInformations";
 import ChoiceEnum from '../../enums/ChoiceEnum';
 import UserPayloadTypes from "../../types/UserPayloadTypes";
 import RolesEnum from "../../enums/RolesEnum";
+import { extractData, legalizationData } from "../../data/data";
 
+const stepObject= {
+   "legalization" : legalizationData ,
+   "extract":  extractData
+};
 const Home = () => {
   const [activeStep, setActiveStep] = useState({ index: 0, choiceTitle: ChoiceEnum.Legalization });
   const [myDocuments, setMyDocuments] = useState<DocumentTypes[]>([]);
   const [paymentsData, setPaymentsData] = useState<PaymentTypes[]>([]);
-  const [steps, setSteps] = useState(stepData);
+  const [steps, setSteps] = useState(stepObject[ChoiceEnum.Legalization]);
   const [userInformation, setUserInformation] = useState<UserPayloadTypes>();
 
   const buttonInformationRef = useRef<HTMLButtonElement>(null);
@@ -107,8 +111,6 @@ const Home = () => {
     });
   }, []);
 
-
-
   return (
     <Container
       maxWidth={'md'}
@@ -128,11 +130,14 @@ const Home = () => {
       >
         <Choice
           onClickChoice={(choiceTitle) => {
+
             setActiveStep((prevState) => ({
               ...prevState,
               index: 1,
               choiceTitle: choiceTitle,
             }));
+
+            setSteps(stepObject[choiceTitle]);
           }
           }
         />

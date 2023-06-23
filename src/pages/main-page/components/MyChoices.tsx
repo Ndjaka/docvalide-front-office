@@ -1,7 +1,7 @@
 import {Box, Typography,Checkbox, Grid, Button } from '@mui/material';
 import React, {useCallback, useEffect} from 'react';
 import palette from '../../../theme/palette';
-import { choiceDatas } from './data';
+import { choiceDatas } from '../../../data/data';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MyChoicesItems from './MyChoiceItems';

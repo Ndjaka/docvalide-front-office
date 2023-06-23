@@ -1,0 +1,304 @@
+{
+  "residence": [
+    {
+      "id": "Abong Mbang",
+      "label": "Abong Mbang"
+    },
+    {
+      "id": "Ambam",
+      "label": "Ambam"
+    },
+    {
+      "id": "Akonolinga",
+      "label": "Akonolinga"
+    },
+    {
+      "id": "Ayos",
+      "label": "Ayos"
+    },
+    {
+      "id": "Bafia",
+      "label": "Bafia"
+    },
+    {
+      "id": "Bafang",
+      "label": "Bafang"
+    },
+    {
+      "id": "Bafoussam",
+      "label": "Bafoussam"
+    },
+    {
+      "id": "Bamenda",
+      "label": "Bamenda"
+    },
+    {
+      "id": "Bana",
+      "label": "Bana"
+    },
+    {
+      "id": "Baham",
+      "label": "Baham"
+    },
+    {
+      "id": "Bandjoun",
+      "label": "Bandjoun"
+    },
+    {
+      "id": "Banganté",
+      "label": "Banganté"
+    },
+    {
+      "id": "Bangem",
+      "label": "Bangem"
+    },
+    {
+      "id": "Batoufan",
+      "label": "Batoufan"
+    },
+    {
+      "id": "Bertoua",
+      "label": "Bertoua"
+    },
+    {
+      "id": "Belabo",
+      "label": "Belabo"
+    },
+    {
+      "id": "Buea",
+      "label": "Buea"
+    },
+    {
+      "id": "Douala",
+      "label": "Douala"
+    },
+    {
+      "id": "Doumé",
+      "label": "Doumé"
+    },
+    {
+      "id": "Dschang",
+      "label": "Dschang"
+    },
+    {
+      "id": "Dimako",
+      "label": "Dimako"
+    },
+    {
+      "id": "Ebolowa",
+      "label": "Ebolowa"
+    },
+    {
+      "id": "Edea",
+      "label": "Edea"
+    },
+    {
+      "id": "Endom",
+      "label": "Endom"
+    },
+    {
+      "id": "Essé",
+      "label": "Essé"
+    },
+    {
+      "id": "Eséka",
+      "label": "Eséka"
+    },
+    {
+      "id": "Foundong",
+      "label": "Foundong"
+    },
+    {
+      "id": "Garoua",
+      "label": "Garoua"
+    },
+    {
+      "id": "Garoua Boulaï",
+      "label": "Garoua Boulaï"
+    },
+    {
+      "id": "Guidère",
+      "label": "Guidère"
+    },
+    {
+      "id": "Kribi",
+      "label": "Kribi"
+    },
+    {
+      "id": "Kétte",
+      "label": "Kétte"
+    },
+    {
+      "id": "Kaélé",
+      "label": "Kaélé"
+    },
+    {
+      "id": "Koumba",
+      "label": "Koumba"
+    },
+    {
+      "id": "Kousseri",
+      "label": "Kousseri"
+    },
+    {
+      "id": "Limbé",
+      "label": "Limbé"
+    },
+    {
+      "id": "Lomié",
+      "label": "Lomié"
+    },
+    {
+      "id": "Makénéné",
+      "label": "Makénéné"
+    },
+    {
+      "id": "Manfé",
+      "label": "Manfé"
+    },
+    {
+      "id": "Mbandjock",
+      "label": "Mbandjock"
+    },
+    {
+      "id": "Mbanga",
+      "label": "Mbanga"
+    },
+    {
+      "id": "Mbalmayo",
+      "label": "Mbalmayo"
+    },
+    {
+      "id": "Mbengui",
+      "label": "Mbengui"
+    },
+    {
+      "id": "Mbouda",
+      "label": "Mbouda"
+    },
+    {
+      "id": "Mbang",
+      "label": "Mbang"
+    },
+    {
+      "id": "Meiganga",
+      "label": "Meiganga"
+    },
+    {
+      "id": "Mesaména",
+      "label": "Mesaména"
+    },
+    {
+      "id": "Mfou",
+      "label": "Mfou"
+    },
+    {
+      "id": "Mengang",
+      "label": "Mengang"
+    },
+    {
+      "id": "Moloundou",
+      "label": "Moloundou"
+    },
+    {
+      "id": "Monatélé",
+      "label": "Monatélé"
+    },
+    {
+      "id": "Mokolo",
+      "label": "Mokolo"
+    },
+    {
+      "id": "Mora",
+      "label": "Mora"
+    },
+    {
+      "id": "Ndop",
+      "label": "Ndop"
+    },
+    {
+      "id": "Ngoumou",
+      "label": "Ngoumou"
+    },
+    {
+      "id": "Nkambé",
+      "label": "Nkambé"
+    },
+    {
+      "id": "Nkongsamba",
+      "label": "Nkongsamba"
+    },
+    {
+      "id": "Nkoteng",
+      "label": "Nkoteng"
+    },
+    {
+      "id": "Ntui",
+      "label": "Ntui"
+    },
+    {
+      "id": "Nitoukou",
+      "label": "Nitoukou"
+    },
+    {
+      "id": "Ntui",
+      "label": "Ntui"
+    },
+    {
+      "id": "Nanga Eboko",
+      "label": "Nanga Eboko"
+    },
+    {
+      "id": "Ngaoundal",
+      "label": "Ngaoundal"
+    },
+    {
+      "id": "Ngaoundéré",
+      "label": "Ngaoundéré"
+    },
+    {
+      "id": "Obala",
+      "label": "Obala"
+    },
+    {
+      "id": "Okola",
+      "label": "Okola"
+    },
+    {
+      "id": "Poly",
+      "label": "Poly"
+    },
+    {
+      "id": "Sangmelima",
+      "label": "Sangmelima"
+    },
+    {
+      "id": "Tcholiré",
+      "label": "Tcholiré"
+    },
+    {
+      "id": "Tibati",
+      "label": "Tibati"
+    },
+    {
+      "id": "Wum",
+      "label": "Wum"
+    },
+    {
+      "id": "Yabassi",
+      "label": "Yabassi"
+    },
+    {
+      "id": "Yaoundé",
+      "label": "Yaoundé"
+    },
+    {
+      "id": "Yokadouma",
+      "label": "Yokadouma"
+    },
+    {
+      "id": "Yagoua",
+      "label": "Yagoua"
+    }
+  ]
+}

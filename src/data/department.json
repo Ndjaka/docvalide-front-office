@@ -1,0 +1,246 @@
+{
+  "ADAMAOUA": [
+    {
+      "id": "mayo banyo",
+      "label": "Mayo Banyo"
+    },
+    {
+      "id": "mbéré",
+      "label": "Mbéré"
+    },
+    {
+      "id": "vina",
+      "label": "Vina"
+    },
+    {
+      "id": "tibati",
+      "label": "Tibati"
+    },
+    {
+      "id": "faro et déo",
+      "label": "Faro et Déo"
+    },
+    {
+      "id": "djérem",
+      "label": "Djérem"
+    }
+  ],
+  "CENTRE": [
+    {
+      "id": "nyong et mfoumou",
+      "label": "Nyong & Mfoumou"
+    },
+    {
+      "id": "mfoundi",
+      "label": "Mfoundi"
+    },
+    {
+      "id": "haute sanaga",
+      "label": "Haute Sanaga"
+    },
+    {
+      "id": "mefou et afamba",
+      "label": "Mefou et Afamba"
+    },
+    {
+      "id": "nyong et ékélé",
+      "label": "Nyong et Ékélé"
+    },
+    {
+      "id": "mbam et kim",
+      "label": "Mbam et Kim"
+    },
+    {
+      "id": "mbam et inoubou",
+      "label": "Mbam et Inoubou"
+    },
+    {
+      "id": "mefou et ekono",
+      "label": "Mefou et Akono"
+    },
+    {
+      "id": "nyong et so'o",
+      "label": "Nyong et So'o"
+    },
+    {
+      "id": "lékié",
+      "label": "Lékié"
+    }
+  ],
+  "EST": [
+    {
+      "id": "lom et djérem",
+      "label": "Lom et Djérem"
+    },
+    {
+      "id": "haut nyong",
+      "label": "Haut Nyong"
+    },
+    {
+      "id": "kadey",
+      "label": "Kadey"
+    },
+    {
+      "id": "mboumba et ngoko",
+      "label": "Mboumba et Ngoko"
+    }
+  ],
+  "EXTREME NORD": [
+    {
+      "id": "mayo kani",
+      "label": "Mayo Kani"
+    },
+    {
+      "id": "Logone et chari",
+      "label": "Logone et Chari"
+    },
+    {
+      "id": "diamaré",
+      "label": "Diamaré"
+    },
+    {
+      "id": "mayo tsanaga",
+      "label": "Mayo Tsanaga"
+    }
+  ],
+  "LITTORAL": [
+    {
+      "id": "wouri",
+      "label": "Wouri"
+    },
+    {
+      "id": "sanaga maritime",
+      "label": "Sanaga Maritime"
+    },
+    {
+      "id": "moungo",
+      "label": "Moungo"
+    },
+    {
+      "id": "nkam",
+      "label": "Nkam"
+    }
+  ],
+  "NORD": [
+    {
+      "id": "bénoué",
+      "label": "Bénoué"
+    },
+    {
+      "id": "mayo rey",
+      "label": "Mayo Rey"
+    },
+    {
+      "id": "mayo louti",
+      "label": "Mayo Louti"
+    },
+    {
+      "id": "poly",
+      "label": "Poly"
+    }
+  ],
+  "NORD OUEST": [
+    {
+      "id": "mezam",
+      "label": "Mezam"
+    },
+    {
+      "id": "bui",
+      "label": "Bui"
+    },
+    {
+      "id": "Boyo",
+      "label": "Boyo"
+    },
+    {
+      "id": "Momo",
+      "label": "Momo"
+    },
+    {
+      "id": "Ngo ketoundja",
+      "label": "Ngo Ketundja"
+    },
+    {
+      "id": "menchum",
+      "label": "Menchum"
+    }
+  ],
+  "OUEST": [
+    {
+      "id": "Mifi",
+      "label": "Mifi"
+    },
+    {
+      "id": "koung khi",
+      "label": "Koung Khi"
+    },
+    {
+      "id": "haut nkam",
+      "label": "Haut Nkam"
+    },
+    {
+      "id": "haut plateau",
+      "label": "Haut Plateau"
+    },
+    {
+      "id": "noun",
+      "label": "Noun"
+    },
+    {
+      "id": "menoua",
+      "label": "Menoua"
+    },
+    {
+      "id": "bamboutos",
+      "label": "Bamboutos"
+    },
+    {
+      "id": "ndé",
+      "label": "Ndé"
+    }
+  ],
+  "SUD": [
+    {
+      "id": "dja et lobo",
+      "label": "Dja et Lobo"
+    },
+    {
+      "id": "mvilla",
+      "label": "Mvilla"
+    },
+    {
+      "id": "océan",
+      "label": "Océan"
+    },
+    {
+      "id": "valée du ntem",
+      "label": "Valée du Ntem"
+    }
+  ],
+  "SUD OUEST": [
+    {
+      "id": "coupé manengouba",
+      "label": "Coupé Manengouba"
+    },
+    {
+      "id": "fako",
+      "label": "Fako"
+    },
+    {
+      "id": "mémé",
+      "label": "Mémé"
+    },
+    {
+      "id": "manyu",
+      "label": "Manyu"
+    },
+    {
+      "id": "lebialem",
+      "label": "Lebialem"
+    },
+    {
+      "id": "ndian",
+      "label": "Ndian"
+    }
+  ]
+}

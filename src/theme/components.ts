@@ -94,7 +94,7 @@ const components: Components = {
                 position:'relative'
             }
         }
-    }
+    },
 }
 
 export default components;

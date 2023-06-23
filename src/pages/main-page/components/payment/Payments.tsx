@@ -1,14 +1,12 @@
-import {Box, Button, Grid, Hidden, IconButton, Typography } from '@mui/material';
-import React, { Fragment, useCallback, useMemo } from "react";
-import palette from '../../../../theme/palette';
-import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
-import ButtonAction from './ButtonAction';
-import { DocumentTypes } from '../../../../types/DocumentTypes';
+import {Grid } from '@mui/material';
+import React, { useCallback, useMemo } from "react";
 import PaymentTypes from '../../../../types/PaymentTypes';
 import PaymentItems from './PaymentItems';
 import PaymentSummary from './PaymentSummary';
 import UserPayloadTypes from "../../../../types/UserPayloadTypes";
 import { LegalizationDocRequest } from "../../../../types/LegalizationPayloadTypes";
+import PaymentService from "../../../../api/services/PaymentService";
+import PaymentParamsTypes from "../../../../types/PaymentParamsTypes";
 
 interface PaymentsProps{
     payments : PaymentTypes[];
@@ -18,6 +16,8 @@ interface PaymentsProps{
 }
 function Payments(props:PaymentsProps) {
     const {payments , setPayments, userInfos} = props;
+
+ // const mutation = useMutation((params:PaymentParamsTypes) => PaymentService.buy(params));
 
     /**
      * Reduce the quantity of the document
@@ -83,9 +83,9 @@ function Payments(props:PaymentsProps) {
                     commissionCosts : COMMISION_COSTS[1]
                 };
          }
-     }
+     };
 
-     const legalizationDocs : LegalizationDocRequest[] = useMemo(() => {
+    const legalizationDocs : LegalizationDocRequest[] = useMemo(() => {
         return payments.map(item => {
             return {
                 quantity : item?.quantity as number,
@@ -101,9 +101,32 @@ function Payments(props:PaymentsProps) {
    */
 
   const handlePay = () => {
-        console.log('handlePay');
-   }
-     
+
+    const VITE_MARCHAND_CODE = import.meta.env.VITE_MARCHAND_CODE as string;
+
+    const params: PaymentParamsTypes = {
+      rN: `${userInfos?.firstname} ${userInfos?.lastname}`,
+      rT: "691966876", //userInfos?.phone as string,
+      rE: userInfos?.email as string,
+      rMt: totalAmountOfDocument().totalAmount as number + totalAmountOfDocument().commissionCosts as number,
+      rDvs: 'XAF',
+      source: 'GHOSTTECH',
+      endPage: 'http://localhost:5173/',
+      // notifyPage: 'http://localhost:5173/',
+      cancelPage: 'http://localhost:5173/',
+      motif: userInfos?.motif as string,
+      cmd:"start",
+      rH: VITE_MARCHAND_CODE
+    };
+
+    PaymentService.buy(params).then(res => {
+      console.log(res);
+    }).catch(err => {
+      console.log(err);
+    });
+
+  };
+
     return (
         <Grid container
               spacing={1}

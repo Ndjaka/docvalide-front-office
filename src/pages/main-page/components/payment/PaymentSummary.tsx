@@ -1,4 +1,5 @@
 import { Box, Button, Hidden, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import React from 'react';
 
 
@@ -6,9 +7,10 @@ interface PaymentSummaryProps {
    commissionCosts : number;
     totalPaid : number;
     onPay?: () => void;
+    isLoading?: boolean;
 }
 function PaymentSummary(props : PaymentSummaryProps) {
-    const {commissionCosts , totalPaid, onPay} = props;
+    const {commissionCosts , totalPaid, onPay, isLoading} = props;
 
     return (
         <Box>
@@ -79,14 +81,15 @@ function PaymentSummary(props : PaymentSummaryProps) {
 
             </Box>
             <Hidden smDown>
-                <Button
+                <LoadingButton
+                    loading={isLoading}
                     onClick={onPay}
                     variant="contained"
                     color="primary"
                     fullWidth
                 >
                     Payer
-                </Button>
+                </LoadingButton>
             </Hidden>
         </Box>
     );

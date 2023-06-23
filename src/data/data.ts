@@ -107,7 +107,7 @@ const choiceDatas  = [
         selected:false
     }
 ]
-const stepData = [
+const legalizationData = [
     {
         stepName: "Mes informations",
         isCompleted: false,
@@ -129,4 +129,21 @@ const stepData = [
     }
 ]
 
-export { choiceDatas, stepData }
+const extractData = [
+    {
+        stepName: "Mes informations",
+        isCompleted: false,
+        isLastItem: false,
+    },
+    {
+        stepName: "Ma CNI",
+        isCompleted: false,
+        isLastItem: false,
+    }, {
+        stepName: "Paiement",
+        isCompleted: false,
+        isLastItem: true,
+    }
+]
+
+export { choiceDatas, legalizationData , extractData }

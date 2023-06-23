@@ -3,6 +3,7 @@ import React from 'react';
 import { FormikFieldWrapper, FormikFieldWrapperProps } from "./FormikFieldWrapper";
 import { useField } from "formik";
 import { FormControl, MenuItem, OutlinedTextFieldProps, Select, SelectProps, Typography } from "@mui/material";
+import palette from "../../theme/palette";
 
 interface selectOptions {
   label: string,
@@ -38,6 +39,10 @@ export const FormikSelectField = (props: FormikSelectFieldProps) => {
       <FormControl fullWidth>
         <Select
           {...rest}
+          sx={{
+            "& svg": {
+            color: palette?.primary?.main
+          }}}
           label={""}
           error={!!(meta.touched && meta.error)}
           name={field.name}
