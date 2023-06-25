@@ -130,7 +130,7 @@ const Home = () => {
       >
         <Choice
           onClickChoice={(choiceTitle) => {
-
+            console.log({ choiceTitle });
             setActiveStep((prevState) => ({
               ...prevState,
               index: 1,
@@ -175,18 +175,19 @@ const Home = () => {
         }}
         >
           <MyInformations
+            choiceType={activeStep.choiceTitle}
             ref={buttonInformationRef}
             onSubmit={(values : UserValues) => {
               if (Object.keys(values).length > 0) {
                 setUserInformation({
-                    firstname : values.full_name.split(' ')[0],
-                    lastname : values.full_name.split(' ')[1],
-                    email : values.email,
-                    phoneNumber : values.phone,
-                    roles : RolesEnum.USER,
-                    townOfResidence : values.town,
-                    motif: values.reason,
-                    receiptMoment : values.moment
+                    firstname : (values.full_name as string).split(' ')[0] ,
+                    lastname : (values.full_name as string).split(' ')[1] ,
+                    email : values.email as string,
+                    phoneNumber : values.phone as string,
+                    roles : RolesEnum.USER as string,
+                    townOfResidence : values.townOfResidence as string,
+                    motif: values.reason as string,
+                    receiptMoment : values.moment as string
                 });
                 setActiveStep((prevState) => ({
                   ...prevState,

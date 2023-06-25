@@ -30,7 +30,7 @@ export const FormikSelectField = (props: FormikSelectFieldProps) => {
       gridClassName={gridClassName}
     >
       <Typography
-        mb={'3px'}
+        mb={'10px'}
         variant={'body1'}
         color={!!(meta.touched && meta.error) ? "red" : 'text.primary'}
       >
@@ -41,8 +41,10 @@ export const FormikSelectField = (props: FormikSelectFieldProps) => {
           {...rest}
           sx={{
             "& svg": {
-            color: palette?.primary?.main
-          }}}
+            color: palette?.primary?.main,
+            },
+            ...rest.sx
+          }}
           label={""}
           error={!!(meta.touched && meta.error)}
           name={field.name}

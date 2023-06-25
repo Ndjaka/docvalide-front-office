@@ -28,7 +28,6 @@ export interface FormikAutocompleteProps<
     FormikFieldWrapperProps {
   name: string;
   fullWidth?: boolean;
-  country?: boolean;
   loading?: boolean;
   autoFocus?: boolean;
   onChange?: undefined;
@@ -56,25 +55,6 @@ export default function FormikAutocomplete<
     name: props.name,
   });
 
-  useEffect(() => {
-    if (props.country && !props.value) fetchCountry();
-  }, []);
-
-  const fetchCountry = () => {
-    fetch('https://ipapi.co/json/')
-      .then(async (r) => {
-        const { country_calling_code } = await r.json();
-        const value = props.options.find(
-          (o) => `+${(o as any).id}` === country_calling_code
-        );
-        if (props.onValueChange) props.onValueChange(value);
-        if (value) {
-          helpers.setValue(value);
-        }
-      })
-      .catch((e) => console.error('Unable to fetch default country'));
-  };
-
   const GroupHeader = styled('div')(({ theme }) => ({
     position: 'sticky',
     top: '-8px',
@@ -100,6 +80,7 @@ export default function FormikAutocomplete<
     >
       <Typography
         variant={'body1'}
+        mb={'3px'}
         color={!!(meta.touched && meta.error) ? 'red' : 'text.primary'}
       >
         {props.label}
@@ -151,7 +132,7 @@ export default function FormikAutocomplete<
         }}
         onChange={(e, value, reason, details) => {
           if (props.onValueChange) props.onValueChange(value);
-          helpers.setValue(value);
+              helpers.setValue(value);
         }}
         options={props.options}
         onBlur={(e) => {
