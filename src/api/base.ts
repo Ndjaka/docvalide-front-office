@@ -6,7 +6,9 @@ const apiClient = axios.create();
 apiClient.interceptors.request.use((config : any) => {
     return ({
       ...config,
-      headers: {},
+      headers: {
+        "Allow-Control-Allow-Origin": "*", // Required for CORS support to work
+      },
     })
   },
   error => Promise.reject(error),

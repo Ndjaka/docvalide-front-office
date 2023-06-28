@@ -45,9 +45,6 @@ function MyChoices(props:MyChoicesProps) {
     }, [onAddDocument]);
 
 
-
-
-
     return (
         <Box >
             <Typography variant="overline" >Sélectionner les documents à légaliser</Typography>

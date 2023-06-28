@@ -106,7 +106,7 @@ const choiceDatas  = [
         type: 'OTHERS',
         selected:false
     }
-]
+];
 const legalizationData = [
     {
         stepName: "Mes informations",
@@ -127,7 +127,7 @@ const legalizationData = [
         isCompleted: false,
         isLastItem: true,
     }
-]
+];
 
 const extractData = [
     {
@@ -144,6 +144,23 @@ const extractData = [
         isCompleted: false,
         isLastItem: true,
     }
+];
+
+const cniData = [
+    {
+        id: 0,
+        designation: 'Recto',
+        price: 2500,
+        type: 'RECTO_COPY',
+        selected:false
+    },
+    {
+        id: 1,
+        designation: 'Verso',
+        price: 2100,
+        type: 'VERSO_COPY',
+        selected:false
+    }
 ]
 
-export { choiceDatas, legalizationData , extractData }
+export { choiceDatas, legalizationData , extractData , cniData }

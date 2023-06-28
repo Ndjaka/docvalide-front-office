@@ -35,8 +35,6 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
 
     const { choiceType , onSubmit } = props;
 
-  console.log({ "MyInformations" : choiceType });
-
     const initialValues : UserValues = {
         full_name: '',
         email: '',
@@ -51,6 +49,8 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
 
     }
 
+  console.log({ "MyInformations--birth_department" : choiceType === ChoiceEnum.Legalization  });
+
     const validationSchema = {
         full_name: Yup.string().max(255).required('Le nom et le prénom doivent être renseigné'), // for extract and legalization
         email: Yup.string().email("L'adresse email doit être valide").required("L'adresse email doit être renseigné"), // for extract and legalization
@@ -59,7 +59,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
         reason: choiceType === ChoiceEnum.Extract ? Yup.string().optional() : Yup.string().max(255).required("Le motif doit être renseigné"), // for legalization
         moment: choiceType === ChoiceEnum.Extract ? Yup.string().optional() : Yup.string().max(255).required("Le moment de reception doit être renseigné"),
         birth_date: choiceType === ChoiceEnum.Legalization ? Yup.string().optional() : Yup.string().max(255).required("La date de naissance doit être renseigné"), // for extract
-        birth_department: choiceType === ChoiceEnum.Legalization ? Yup.string().optional() : Yup.object().required("Le département de naissance doit être renseigné"), // for extract
+        birth_department: choiceType === ChoiceEnum.Legalization ? Yup.object().optional() : Yup.object().required("Le département de naissance doit être renseigné"), // for extract
         father_name: choiceType === ChoiceEnum.Extract ? Yup.string().max(255).required("Le nom du père doit être renseigné") : Yup.string().optional() , // for extract and legalization
         mother_name: choiceType === ChoiceEnum.Extract ? Yup.string().max(255).required("Le nom de la mère doit être renseigné") : Yup.string().optional() , // for extract and legalization
     }
@@ -76,7 +76,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
           {({ setFieldTouched, handleSubmit,errors }) => (
             <Form
               onSubmit={(e) => {
-                console.log(errors);
+                console.log({ errors });
                 handleSubmit(e);
                 Object.keys(initialValues).forEach((field) => { setFieldTouched(field, true); });
               }}

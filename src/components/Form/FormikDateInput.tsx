@@ -1,5 +1,5 @@
 // @flow
-import { OutlinedTextFieldProps, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import {
   FormikFieldWrapper,
   FormikFieldWrapperProps,
@@ -7,11 +7,13 @@ import {
 import { useField } from 'formik';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from "dayjs";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DateTimePickerProps } from '@mui/lab';
 import palette from '../../theme/palette';
-import dayjs from 'dayjs';
+import 'dayjs/locale/fr';
+dayjs.locale('fr');
 
 interface FormikDateInputProps
   extends Partial<DateTimePickerProps<any>>,
