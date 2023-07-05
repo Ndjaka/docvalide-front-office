@@ -24,9 +24,16 @@ export interface UserValues  {
   phone?: string,
   reason?: string,
   moment?: string,
-  townOfResidence?: string,
+  townOfResidence?: {
+    id: string,
+    label: string,
+  },
   birth_date: Dayjs,
-  birth_department: string,
+  birth_department: {
+    id: string,
+    label: string,
+    region: string
+  },
   father_name: string,
   mother_name: string
 }
@@ -44,8 +51,15 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
         father_name: '',
         mother_name: '',
         birth_date:  dayjs(new Date()),
-        birth_department: '',
-        townOfResidence: '',
+        birth_department: {
+          id: '',
+          label: '',
+          region: ''
+        },
+        townOfResidence: {
+          id: '',
+          label: '',
+        },
 
     }
 

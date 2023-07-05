@@ -1,26 +1,27 @@
-import React, { useCallback, useRef, useState } from "react";
-import { Box, Container } from "@mui/material";
-import Choice from "./components/Choice";
-import LayoutStep from "./components/LayoutStep";
-import legalization from "../../assets/Legalisation.svg";
-import extract from "../../assets/Extrait.svg";
-import ReactSwipableView from "react-swipeable-views";
-import MyChoices from "./components/MyChoices";
-import MyDocuments from "./components/drop-document/MyDocuments";
-import Payments from "./components/payment/Payments";
-import { DocumentTypes } from "../../types/DocumentTypes";
-import DocumentEnum from "../../enums/DocumentEnum";
-import PaymentTypes from "../../types/PaymentTypes";
-import MyInformations, { UserValues } from "./components/MyInformations";
-import ChoiceEnum from "../../enums/ChoiceEnum";
-import UserPayloadTypes from "../../types/UserPayloadTypes";
-import RolesEnum from "../../enums/RolesEnum";
-import { cniData, extractData, legalizationData } from "../../data/data";
-import choiceEnum from "../../enums/ChoiceEnum";
+import React, { useCallback, useRef, useState } from 'react';
+import { Box, Container } from '@mui/material';
+import Choice from './components/Choice';
+import LayoutStep from './components/LayoutStep';
+import legalization from '../../assets/Legalisation.svg';
+import extract from '../../assets/Extrait.svg';
+import ReactSwipableView from 'react-swipeable-views';
+import MyChoices from './components/MyChoices';
+import MyDocuments from './components/drop-document/MyDocuments';
+import Payments from './components/payment/Payments';
+import { DocumentTypes } from '../../types/DocumentTypes';
+import DocumentEnum from '../../enums/DocumentEnum';
+import PaymentTypes from '../../types/PaymentTypes';
+import MyInformations, { UserValues } from './components/MyInformations';
+import ChoiceEnum from '../../enums/ChoiceEnum';
+import UserPayloadTypes from '../../types/UserPayloadTypes';
+import RolesEnum from '../../enums/RolesEnum';
+import { cniData, extractData, legalizationData } from '../../data/data';
+import choiceEnum from '../../enums/ChoiceEnum';
+import dayjs from 'dayjs';
 
-const stepObject= {
-   "legalization" : legalizationData ,
-   "extract":  extractData
+const stepObject = {
+  legalization: legalizationData,
+  extract: extractData,
 };
 const Home = () => {
   const [activeStep, setActiveStep] = useState({
@@ -41,16 +42,19 @@ const Home = () => {
    *  @returns {void} - The new status of step.
    */
 
-  const handleStepChange = useCallback((step: number, isCompleted: boolean) => {
-    setSteps((prevState) => {
-      return prevState.map((item, index) => {
-        if (index === step) {
-          return { ...item, isCompleted };
-        }
-        return item;
+  const handleStepChange = useCallback(
+    (step: number, isCompleted: boolean) => {
+      setSteps((prevState) => {
+        return prevState.map((item, index) => {
+          if (index === step) {
+            return { ...item, isCompleted };
+          }
+          return item;
+        });
       });
-    });
-  }, [setSteps]);
+    },
+    [setSteps]
+  );
 
   const handleNext = useCallback(() => {
     switch (activeStep.index) {
@@ -61,12 +65,20 @@ const Home = () => {
         break;
       case 2:
         {
-          if (myDocuments.length > 0) {
-            setActiveStep((prevState) => ({
-              ...prevState,
-              index: prevState.index + 1,
-            }));
-            handleStepChange(1, true);
+          if (activeStep.choiceTitle === choiceEnum.Legalization) {
+            if (myDocuments.length > 0) {
+              setActiveStep((prevState) => ({
+                ...prevState,
+                index: prevState.index + 1,
+              }));
+              handleStepChange(1, true);
+            }
+          } else {
+            if (paymentsData.length === myDocuments.length) {
+              handleStepChange(1, true);
+            } else {
+              changeStatusOfDocumentIfIsEmpty();
+            }
           }
         }
         break;
@@ -98,26 +110,29 @@ const Home = () => {
    *  @returns {void}
    *
    */
-  const handleAddDocument = useCallback((value: DocumentTypes) => {
-    setMyDocuments((prevState) => {
-      let choicesUpdated = [...prevState];
-      const index = choicesUpdated.findIndex(
-        (document) => document.id === value.id
-      );
+  const handleAddDocument = useCallback(
+    (value: DocumentTypes) => {
+      setMyDocuments((prevState) => {
+        let choicesUpdated = [...prevState];
+        const index = choicesUpdated.findIndex(
+          (document) => document.id === value.id
+        );
 
-      if (value.selected) {
-        if (index !== -1) {
-          choicesUpdated[index] = value;
-        } else {
-          choicesUpdated.push(value);
+        if (value.selected) {
+          if (index !== -1) {
+            choicesUpdated[index] = value;
+          } else {
+            choicesUpdated.push(value);
+          }
+        } else if (index !== -1) {
+          choicesUpdated.splice(index, 1);
         }
-      } else if (index !== -1) {
-        choicesUpdated.splice(index, 1);
-      }
 
-      return choicesUpdated;
-    });
-  }, [ setMyDocuments]);
+        return choicesUpdated;
+      });
+    },
+    [setMyDocuments]
+  );
 
   const changeStatusOfDocumentIfIsEmpty = useCallback(() => {
     setMyDocuments((prevState) => {
@@ -130,48 +145,61 @@ const Home = () => {
     });
   }, [setMyDocuments]);
 
-
-
   /**
    * Handle submit information
    * @param  {UserValues} values
    * @return {void}
    */
 
-  const handleSubmitInformation = useCallback((values: UserValues) => {
+  const handleSubmitInformation = useCallback(
+    (values: UserValues) => {
+      if (Object.keys(values).length > 0) {
+        if (activeStep.choiceTitle === ChoiceEnum.Extract) {
+          const cniToDocument = cniData.map((item) => {
+            return {
+              ...item,
+              docStatus: DocumentEnum.DEFAULT,
+              selected: true,
+            };
+          });
 
-    if (Object.keys(values).length > 0) {
+          if (paymentsData.length === 0) {
+            cniToDocument.forEach((item) => {
+              handleAddDocument(item);
+            });
+          }
+        }
 
-      if (activeStep.choiceTitle === ChoiceEnum.Extract) {
-        cniData.map((item) => {
-          return {
-            ...item,
-            docStatus: DocumentEnum.DEFAULT,
-            selected: true,
-          };
-        }).forEach(handleAddDocument);
+        setUserInformation({
+          birth_date: dayjs(values.birth_date as unknown as Date).format(
+            'YYYY-MM-DD'
+          ),
+          birth_department: values.birth_department.id as string,
+          father_name: values.father_name as string,
+          mother_name: values.mother_name as string,
+          firstname: (values.full_name as string).split(' ')[0],
+          lastname: (values.full_name as string).split(' ')[1],
+          email: values.email as string,
+          phoneNumber: values.phone as string,
+          roles: RolesEnum.USER as string,
+          townOfResidence: values.townOfResidence?.id as string,
+          motif: values.reason as string,
+          receiptMoment: values.moment as string,
+        });
+
+        setActiveStep((prevState) => ({
+          ...prevState,
+          index: prevState.index + 1,
+        }));
+
+        handleStepChange(0, true);
       }
+    },
+    [activeStep.choiceTitle, handleAddDocument,paymentsData]
+  );
 
-      setUserInformation({
-        firstname: (values.full_name as string).split(' ')[0],
-        lastname: (values.full_name as string).split(' ')[1],
-        email: values.email as string,
-        phoneNumber: values.phone as string,
-        roles: RolesEnum.USER as string,
-        townOfResidence: values.townOfResidence as string,
-        motif: values.reason as string,
-        receiptMoment: values.moment as string,
-      });
-
-      setActiveStep((prevState) => ({
-        ...prevState,
-        index: prevState.index + 1,
-      }));
-
-      handleStepChange(0, true);
-    }
-
-  }, [activeStep.choiceTitle, handleAddDocument]);
+  console.log('paymentsData', paymentsData);
+  console.log('myDocuments', myDocuments);
 
   return (
     <Container
@@ -186,7 +214,7 @@ const Home = () => {
       <Box
         sx={{
           display: activeStep.index === 0 ? 'block' : 'none',
-          width: '100%'
+          width: '100%',
         }}
       >
         <Choice
@@ -204,7 +232,7 @@ const Home = () => {
       <Box
         sx={{
           display: [1, 2, 3, 4].includes(activeStep.index) ? 'block' : 'none',
-          width: '100%'
+          width: '100%',
         }}
       >
         <LayoutStep
@@ -231,7 +259,7 @@ const Home = () => {
             disabled={true}
             index={activeStep.index - 1}
             style={{
-              height: '392px'
+              height: '392px',
             }}
           >
             <MyInformations
@@ -239,25 +267,29 @@ const Home = () => {
               ref={buttonInformationRef}
               onSubmit={handleSubmitInformation}
             />
-            { activeStep.choiceTitle === choiceEnum.Legalization  ?
+            {activeStep.choiceTitle === choiceEnum.Legalization ? (
               <MyChoices onAddDocument={handleAddDocument} />
-              : <MyDocuments
+            ) : (
+              <MyDocuments
                 myDocuments={myDocuments}
                 setMyDocuments={setMyDocuments}
                 onChangeDocument={setPaymentsData}
               />
-            }
-            { activeStep.choiceTitle === choiceEnum.Legalization  ?
+            )}
+            {activeStep.choiceTitle === choiceEnum.Legalization ? (
               <MyDocuments
-              myDocuments={myDocuments}
-              setMyDocuments={setMyDocuments}
-              onChangeDocument={setPaymentsData}
-            /> : <Payments
+                myDocuments={myDocuments}
+                setMyDocuments={setMyDocuments}
+                onChangeDocument={setPaymentsData}
+              />
+            ) : (
+              <Payments
+                isExtract={activeStep.choiceTitle === choiceEnum.Extract}
                 userInfos={userInformation}
                 payments={paymentsData}
                 setPayments={setPaymentsData}
               />
-            }
+            )}
             <Payments
               userInfos={userInformation}
               payments={paymentsData}

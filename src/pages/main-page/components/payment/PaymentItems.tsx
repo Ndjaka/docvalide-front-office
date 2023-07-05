@@ -6,12 +6,13 @@ import PaymentTypes from '../../../../types/PaymentTypes';
 import ButtonAction from './ButtonAction';
 
 interface PaymentItemsProps {
+    isExtract : boolean;
     data : PaymentTypes;
     onReduce : (value: PaymentTypes) => void;
     onIncrease : (value: PaymentTypes) => void;
 }
 function PaymentItems(props : PaymentItemsProps) {
-    const {data,onReduce,onIncrease } = props;
+    const {data,onReduce,onIncrease , isExtract } = props;
     return (
           <Box sx={{
                                 width: '100%',
@@ -41,12 +42,13 @@ function PaymentItems(props : PaymentItemsProps) {
                                             {data.designation}
                                         </Typography>
                                     </Box>
-                                    <ButtonAction
+                                      {!isExtract &&
+                                        <ButtonAction
                                         price={(data?.price as number) * (data?.quantity as number)}
-                                        onReduce={() =>onReduce(data)}
-                                        onIncrease={() => onIncrease(data)}
-                                        quantity={data?.quantity}
-                                    />
+                                      onReduce={() => onReduce(data)}
+                                      onIncrease={() => onIncrease(data)}
+                                      quantity={data?.quantity}
+                                    />}
                                 </Box>
                             </Box>
     );

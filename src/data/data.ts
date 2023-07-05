@@ -149,14 +149,14 @@ const extractData = [
 const cniData = [
     {
         id: 0,
-        designation: 'Recto',
+        designation: 'CNI - Recto',
         price: 2500,
         type: 'RECTO_COPY',
         selected:false
     },
     {
         id: 1,
-        designation: 'Verso',
+        designation: 'CNI - Verso',
         price: 2100,
         type: 'VERSO_COPY',
         selected:false

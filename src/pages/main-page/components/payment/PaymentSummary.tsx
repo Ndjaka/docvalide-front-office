@@ -4,13 +4,14 @@ import React from 'react';
 
 
 interface PaymentSummaryProps {
+    isExtract? : boolean;
    commissionCosts : number;
     totalPaid : number;
     onPay?: () => void;
     isLoading?: boolean;
 }
 function PaymentSummary(props : PaymentSummaryProps) {
-    const {commissionCosts , totalPaid, onPay, isLoading} = props;
+    const {commissionCosts , totalPaid, onPay, isLoading, isExtract} = props;
 
     return (
         <Box>
@@ -43,7 +44,7 @@ function PaymentSummary(props : PaymentSummaryProps) {
                     mt:'auto'
 
                 }}>
-                    <Box sx={{
+                    {!isExtract && <Box sx={{
                         display:'flex',
                         flexDirection:  'column',
                         alignItems:'flex-end'
@@ -60,12 +61,11 @@ function PaymentSummary(props : PaymentSummaryProps) {
                                 fontWeight : 'bold'
                             }}
                         >{commissionCosts} FCFA</Typography>
-                    </Box>
+                    </Box>}
+
                     <Box sx={{
                         display:'flex',
-                        flexDirection: 'column',
-                        alignItems:'flex-end',
-                        mt:{ lg:'10px' , xs:0}
+                        justifyContent: 'space-between'
                     }}>
                         <Typography
                             sx={{ fontWeight : 'bold' }}
@@ -73,7 +73,10 @@ function PaymentSummary(props : PaymentSummaryProps) {
                             Total
                         </Typography>
                         <Typography
-                            sx={{ fontWeight : 'bold' }}
+                            sx={{
+                                fontSize: '11px',
+                                fontWeight : 'bold'
+                        }}
                             variant={"overline"}
                             color={"red"}>{totalPaid} FCFA</Typography>
                     </Box>
