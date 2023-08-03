@@ -5,6 +5,7 @@ import palette from '../../../theme/palette';
 import StepHeader from './StepHeader';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import useResponsive from "../../../hooks/useResponsive";
 
 interface StepDataProps {
   stepName: string;
@@ -26,6 +27,7 @@ interface LayoutStepProps {
   header: HeaderProps;
   onBack: () => void;
   onNext: () => void;
+  hideNext?: boolean;
 }
 
 function LayoutStep(props: LayoutStepProps) {
@@ -37,7 +39,9 @@ function LayoutStep(props: LayoutStepProps) {
     choiceLayoutName,
     onNext,
     onBack,
+    hideNext = true,
   } = props;
+  const isMobile = useResponsive('isMobile');
 
   return (
     <Box
@@ -104,20 +108,16 @@ function LayoutStep(props: LayoutStepProps) {
       <Box
         sx={{
           paddingLeft: { lg: '24.29px', xs: '8px' },
-          paddingRight: { lg: '24.29px', xs: '8px' },
+          paddingRight: { lg: '24.29px',xs: '8px' },
           paddingBottom: '10px',
           border: `3px solid ${palette?.primary?.main}`,
           width: '100%',
-          height: '588px',
+          height: '590px',
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        <StepHeader
-          title={header.name}
-          start={header.start}
-          end={header.end}
-        />
+        <StepHeader title={header.name} start={header.start} end={header.end} />
         <Box
           sx={{
             overflowY: 'auto',
@@ -141,14 +141,16 @@ function LayoutStep(props: LayoutStepProps) {
             marginTop: 'auto',
             marginBottom: 0,
             paddingTop: '20px',
-            height: '15%',
+            height: '17%',
             width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
-            flexWrap: 'wrap',
-          }}
+            flexWrap: 'wrap'
+        }}
         >
           <Button
+
+            fullWidth={isMobile}
             onClick={onBack}
             color="primary"
             variant="outlined"
@@ -157,14 +159,19 @@ function LayoutStep(props: LayoutStepProps) {
             Précédent
           </Button>
 
-          <Button
-            onClick={onNext}
-            color="primary"
-            variant="contained"
-            endIcon={<ArrowForwardIcon />}
-          >
-            Suivant
-          </Button>
+          {
+            hideNext &&
+            <Button
+              sx={{  marginY: { xs: '10px', md : '0px' , sm: '0px',lg: '0px' } }}
+              fullWidth={isMobile}
+              onClick={onNext}
+              color="primary"
+              variant="contained"
+              endIcon={<ArrowForwardIcon />}
+            >
+              Suivant
+            </Button>
+          }
         </Box>
       </Box>
     </Box>

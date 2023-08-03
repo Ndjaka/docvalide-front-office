@@ -14,8 +14,8 @@ import {
 import Logo from "./logo";
 import menus from "./data";
 import {Link} from "react-router-dom";
-import palette from "../../theme/palette";
 import language from "../../assets/language.svg"
+import palette from "../../../theme/palette";
 
 interface navigationProps {
     mobileOpen: boolean,

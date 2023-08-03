@@ -6,7 +6,7 @@ interface PaymentParamsTypes {
   rH?: string; // seller code,
   rMt: number; // amount to pay,
   rDvs: string; // The currency corresponding to the amount you have entered.
-  rOnly? : string ; // This is optional. If you want your API to display only certain operators,
+  rOnly? : any; // This is optional. If you want your API to display only certain operators,
   // you can specify these operators here. 1=MTN, 2=Orange, 3=Express Union, 10=Dohone-Account, 5=VISA/MASTERCARD, 17=YUP, 18=Yoomee, 20=Gimacpay (BANK-FASTER).
   rLocale?: string; // choice of language FR or EN
   source: string; // salesperson name

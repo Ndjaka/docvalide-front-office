@@ -1,6 +1,6 @@
 import { Box, Button, Hidden, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import React from 'react';
+import React, { forwardRef } from "react";
 
 
 interface PaymentSummaryProps {
@@ -10,7 +10,7 @@ interface PaymentSummaryProps {
     onPay?: () => void;
     isLoading?: boolean;
 }
-function PaymentSummary(props : PaymentSummaryProps) {
+const  PaymentSummary = forwardRef<HTMLButtonElement, PaymentSummaryProps>((props,ref) => {
     const {commissionCosts , totalPaid, onPay, isLoading, isExtract} = props;
 
     return (
@@ -47,7 +47,8 @@ function PaymentSummary(props : PaymentSummaryProps) {
                     {!isExtract && <Box sx={{
                         display:'flex',
                         flexDirection:  'column',
-                        alignItems:'flex-end'
+                        alignItems:'flex-end',
+                        mb: {lg: '10px', xs:0}
                     }}>
                         <Typography
                             sx={{ fontWeight : 'bold' }}
@@ -64,8 +65,9 @@ function PaymentSummary(props : PaymentSummaryProps) {
                     </Box>}
 
                     <Box sx={{
-                        display:'flex',
-                        justifyContent: 'space-between'
+                      display:'flex',
+                      flexDirection:  'column',
+                      alignItems:'flex-end'
                     }}>
                         <Typography
                             sx={{ fontWeight : 'bold' }}
@@ -83,8 +85,9 @@ function PaymentSummary(props : PaymentSummaryProps) {
                 </Box>
 
             </Box>
-            <Hidden smDown>
+
                 <LoadingButton
+                    ref={ref}
                     loading={isLoading}
                     onClick={onPay}
                     variant="contained"
@@ -93,9 +96,9 @@ function PaymentSummary(props : PaymentSummaryProps) {
                 >
                     Payer
                 </LoadingButton>
-            </Hidden>
         </Box>
     );
-}
+});
+
 
 export default PaymentSummary;

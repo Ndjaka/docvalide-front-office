@@ -63,7 +63,6 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
 
     }
 
-  console.log({ "MyInformations--birth_department" : choiceType === ChoiceEnum.Legalization  });
 
     const validationSchema = {
         full_name: Yup.string().max(255).required('Le nom et le prénom doivent être renseigné'), // for extract and legalization
@@ -87,10 +86,9 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
             onSubmit(values);
           }}
         >
-          {({ setFieldTouched, handleSubmit,errors }) => (
+          {({ setFieldTouched, handleSubmit }) => (
             <Form
               onSubmit={(e) => {
-                console.log({ errors });
                 handleSubmit(e);
                 Object.keys(initialValues).forEach((field) => { setFieldTouched(field, true); });
               }}

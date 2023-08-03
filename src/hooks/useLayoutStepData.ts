@@ -8,7 +8,6 @@ const stepObject= {
   "extract":  extractData
 };
 const useLayoutStepData = (choice : ChoiceEnum) => {
-  console.log("choice", choice);
   const [layoutData, setLayoutData] = useState<Array<object>>(stepObject[choice]);
 
   useEffect(() => {

@@ -8,8 +8,11 @@ import { LegalizationDocRequest } from '../../../../types/LegalizationPayloadTyp
 import PaymentService from '../../../../api/services/PaymentService';
 import PaymentParamsTypes from '../../../../types/PaymentParamsTypes';
 import computePrice from '../../../../utils/extractUtils';
+import { useLocation, useNavigate } from "react-router-dom";
+import useTestPayments from "../../../../hooks/useTestPayments";
 
 interface PaymentsProps {
+  buttonRef?: React.Ref<HTMLButtonElement>;
   isExtract?: boolean;
   payments: PaymentTypes[];
   setPayments: React.Dispatch<React.SetStateAction<PaymentTypes[]>>;
@@ -17,9 +20,11 @@ interface PaymentsProps {
 }
 
 function Payments(props: PaymentsProps) {
-  const { payments, setPayments, userInfos, isExtract } = props;
+  const { payments, setPayments, userInfos, isExtract , buttonRef} = props;
 
-  console.log({ userInfos });
+  const [isLoading, setIsLoading] = React.useState(false);
+  const isTest = useTestPayments();
+  console.log('isTest', isTest);
 
   /**
    * Reduce the quantity of the document
@@ -106,6 +111,15 @@ function Payments(props: PaymentsProps) {
     });
   }, [payments]);
 
+  const amount = useMemo(() => {
+    return (isExtract as boolean)
+      ? (computePrice(
+        userInfos?.birth_department as string,
+        userInfos?.townOfResidence as string
+      ) as number)
+      : totalAmountOfDocument().totalAmount as number;
+  }, [payments,userInfos, isExtract]);
+
   /**
    * Handles the payment of the documents
    */
@@ -117,9 +131,9 @@ function Payments(props: PaymentsProps) {
       rN: `${userInfos?.firstname || ''} ${userInfos?.lastname || ''}`,
       rT: userInfos?.phoneNumber as string,
       rE: userInfos?.email as string,
-      rMt: totalAmountOfDocument().totalAmount as number,
+       rMt: isTest ? 100 : amount,
       rDvs: 'XAF',
-      source: 'GHOSTTECH',
+      source: 'DOCVALIDE',
       endPage: 'http://localhost:5173/',
       notifyPage: 'http://localhost:5173/',
       cancelPage: 'http://localhost:5173/',
@@ -127,22 +141,19 @@ function Payments(props: PaymentsProps) {
       cmd: 'start',
       rH: VITE_MARCHAND_CODE,
     };
-
+    setIsLoading(true);
     PaymentService.buy(params)
       .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
+        if (res.status === 200) {
+          setIsLoading(false)
+           document.location.replace(res.config.url as string)
+        }
+      }).catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   };
-  console.log(
-    'computePrice',
-    computePrice(
-      userInfos?.birth_department as string,
-      userInfos?.townOfResidence as string
-    )
-  );
+
   return (
     <Grid container spacing={1} sx={{ position: 'relative' }}>
       <Grid
@@ -180,16 +191,11 @@ function Payments(props: PaymentsProps) {
 
       <Grid item xs={12} sm={6} lg={4}>
         <PaymentSummary
+          ref={buttonRef}
+          isLoading={isLoading}
           onPay={handlePay}
           isExtract={isExtract as boolean}
-          totalPaid={
-            (isExtract as boolean)
-              ? (computePrice(
-                  userInfos?.birth_department as string,
-                  userInfos?.townOfResidence as string
-                ) as number)
-              : totalAmountOfDocument().totalAmount
-          }
+          totalPaid={amount}
           commissionCosts={totalAmountOfDocument().commissionCosts}
         />
       </Grid>

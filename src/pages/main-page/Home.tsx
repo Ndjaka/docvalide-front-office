@@ -31,15 +31,17 @@ const Home = () => {
   const [myDocuments, setMyDocuments] = useState<DocumentTypes[]>([]);
   const [paymentsData, setPaymentsData] = useState<PaymentTypes[]>([]);
   const [steps, setSteps] = useState(stepObject[ChoiceEnum.Legalization]);
-  const [userInformation, setUserInformation] = useState<UserPayloadTypes>();
+  const [userInformation, setUserInformation] = useState<UserPayloadTypes | null>();
 
   const buttonInformationRef = useRef<HTMLButtonElement>(null);
+
+  const buttonPaymentRef = useRef<HTMLButtonElement>(null);
 
   /**
    *  Change the status of step
    *  @param step {number} - The new step to add or update.
    *  @param isCompleted {boolean} -  The new status of step.
-   *  @returns {void} - The new status of step.
+   *  @returns {void}
    */
 
   const handleStepChange = useCallback(
@@ -75,6 +77,10 @@ const Home = () => {
             }
           } else {
             if (paymentsData.length === myDocuments.length) {
+              setActiveStep((prevState) => ({
+                ...prevState,
+                index: prevState.index + 1,
+              }));
               handleStepChange(1, true);
             } else {
               changeStatusOfDocumentIfIsEmpty();
@@ -86,7 +92,7 @@ const Home = () => {
         if (paymentsData.length === myDocuments.length) {
           setActiveStep((prevState) => ({
             ...prevState,
-            index: steps.length,
+            index: prevState.index + 1,
           }));
           handleStepChange(2, true);
         } else {
@@ -134,6 +140,12 @@ const Home = () => {
     [setMyDocuments]
   );
 
+  /**
+   * Change the status of step
+   * @param  {PaymentTypes} value - The new document to add or update.
+   * @return {void}
+   *
+   */
   const changeStatusOfDocumentIfIsEmpty = useCallback(() => {
     setMyDocuments((prevState) => {
       return prevState.map((document) => {
@@ -195,11 +207,14 @@ const Home = () => {
         handleStepChange(0, true);
       }
     },
-    [activeStep.choiceTitle, handleAddDocument,paymentsData]
+    [activeStep.choiceTitle, handleAddDocument, paymentsData]
   );
 
-  console.log('paymentsData', paymentsData);
-  console.log('myDocuments', myDocuments);
+const initAllData = () => {
+  setMyDocuments([]);
+  setPaymentsData([]);
+  setUserInformation(null);
+  }
 
   return (
     <Container
@@ -219,13 +234,13 @@ const Home = () => {
       >
         <Choice
           onClickChoice={(choiceTitle) => {
+            initAllData();
             setActiveStep((prevState) => ({
               ...prevState,
               index: 1,
               choiceTitle: choiceTitle,
             }));
             setSteps(stepObject[choiceTitle]);
-            setMyDocuments([]);
           }}
         />
       </Box>
@@ -254,6 +269,7 @@ const Home = () => {
           }}
           onBack={handleBack}
           onNext={handleNext}
+          hideNext={activeStep.index !== steps.length}
         >
           <ReactSwipableView
             disabled={true}
@@ -285,13 +301,15 @@ const Home = () => {
             ) : (
               <Payments
                 isExtract={activeStep.choiceTitle === choiceEnum.Extract}
-                userInfos={userInformation}
+                userInfos={userInformation as UserPayloadTypes}
                 payments={paymentsData}
                 setPayments={setPaymentsData}
+                buttonRef={buttonPaymentRef}
               />
             )}
             <Payments
-              userInfos={userInformation}
+              buttonRef={buttonPaymentRef}
+              userInfos={userInformation as UserPayloadTypes}
               payments={paymentsData}
               setPayments={setPaymentsData}
             />
