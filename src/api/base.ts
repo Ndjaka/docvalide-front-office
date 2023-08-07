@@ -3,11 +3,12 @@ import axios from "axios";
 
 
 const apiClient = axios.create();
+
 apiClient.interceptors.request.use((config : any) => {
     return ({
       ...config,
       headers: {
-        "Allow-Control-Allow-Origin": "*", // Required for CORS support to work
+        "Content-Type": "application/json"
       },
     })
   },
@@ -17,7 +18,7 @@ apiClient.interceptors.request.use((config : any) => {
 apiClient.interceptors.response.use((response) =>
     response,
   async (error) => {
-    return Promise.reject(error.response.data);
+    return Promise.reject(error);
   },
 );
 

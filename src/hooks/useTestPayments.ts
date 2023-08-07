@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 const useTestPayments = () => {
     const  [isTest, setIsTest] = React.useState<boolean>(false);
-    console.log("href",document.location.href);
+
     useEffect(() => {
         if (document.location.href.includes("localhost") || document.location.href.includes("test")){
             setIsTest(true);

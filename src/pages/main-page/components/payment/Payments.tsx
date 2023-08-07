@@ -4,12 +4,20 @@ import PaymentTypes from '../../../../types/PaymentTypes';
 import PaymentItems from './PaymentItems';
 import PaymentSummary from './PaymentSummary';
 import UserPayloadTypes from '../../../../types/UserPayloadTypes';
-import { LegalizationDocRequest } from '../../../../types/LegalizationPayloadTypes';
+import {
+  LegalizationDocRequest,
+  LegalizationRequest,
+} from '../../../../types/LegalizationPayloadTypes';
 import PaymentService from '../../../../api/services/PaymentService';
 import PaymentParamsTypes from '../../../../types/PaymentParamsTypes';
 import computePrice from '../../../../utils/extractUtils';
-import { useLocation, useNavigate } from "react-router-dom";
-import useTestPayments from "../../../../hooks/useTestPayments";
+import useTestPayments from '../../../../hooks/useTestPayments';
+import LegalizationService from '../../../../api/services/LegalizationService';
+import UserService from '../../../../api/services/UserService';
+import { AxiosResponse } from 'axios';
+import OrderPayloadTypes from '../../../../types/OrderPayloadTypes';
+import OrderEnum from '../../../../enums/OrderEnum';
+import { useSnackbar } from "notistack";
 
 interface PaymentsProps {
   buttonRef?: React.Ref<HTMLButtonElement>;
@@ -24,7 +32,7 @@ function Payments(props: PaymentsProps) {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const isTest = useTestPayments();
-  console.log('isTest', isTest);
+  const {enqueueSnackbar} = useSnackbar();
 
   /**
    * Reduce the quantity of the document
@@ -100,16 +108,6 @@ function Payments(props: PaymentsProps) {
     }
   }, [payments]);
 
-  const legalizationDocs: LegalizationDocRequest[] = useMemo(() => {
-    return payments.map((item) => {
-      return {
-        quantity: item?.quantity as number,
-        fileUrl: item?.fileUrl as string,
-        fileName: item?.fileName as string,
-        designation: item?.designation as string,
-      };
-    });
-  }, [payments]);
 
   const amount = useMemo(() => {
     return (isExtract as boolean)
@@ -134,25 +132,94 @@ function Payments(props: PaymentsProps) {
        rMt: isTest ? 100 : amount,
       rDvs: 'XAF',
       source: 'DOCVALIDE',
-      endPage: 'http://localhost:5173/',
-      notifyPage: 'http://localhost:5173/',
-      cancelPage: 'http://localhost:5173/',
+      endPage: 'http://localhost:5173/payment-status?status=success',
+      notifyPage: 'http://localhost:5173/payment-status?status=notify',
+      cancelPage: 'http://localhost:5173/payment-status?status=cancel',
       motif: userInfos?.motif as string,
       cmd: 'start',
       rH: VITE_MARCHAND_CODE,
+      rOnly: '1,2,3,5',
     };
-    setIsLoading(true);
+
     PaymentService.buy(params)
       .then((res) => {
         if (res.status === 200) {
-          setIsLoading(false)
            document.location.replace(res.config.url as string)
         }
-      }).catch((err) => {
-        console.log(err);
+      })
+  };
+
+  const legalizationDocs: LegalizationDocRequest[] = useMemo(() => {
+    return payments.map((item) => {
+      return {
+        quantity: item?.quantity as number,
+        fileUrl: item?.fileUrl as string,
+        fileName: item?.fileName as string,
+        designation: item?.designation as string,
+      };
+    });
+  }, [payments]);
+
+  const orderProcess = () => {
+    setIsLoading(true);
+    let userId: any;
+    
+    UserService.addUser(userInfos as UserPayloadTypes)
+      .then((userResponse) => {
+        console.log("userResponse", userResponse);
+        if (userResponse.status === 201) {
+           userId = userResponse?.data.data.id;
+
+          const payload: LegalizationRequest = {
+            receiptMoment: userInfos?.receiptMoment as string,
+            motif: userInfos?.motif as string,
+            quantity: payments.reduce(
+              (acc, curr) => acc + (curr?.quantity as number),
+              0
+            ),
+            userId: userId,
+            legalizationDocs,
+          };
+
+          return LegalizationService.addLegalization(payload);
+        } else {
+          throw new Error("Failed to add user.");
+        }
+      })
+      .then((legalizationResponse) => {
+        if (legalizationResponse.status === 201) {
+
+          const payload: OrderPayloadTypes = {
+            orderAmount: amount,
+            orderNumber: `DOCVALIDE-${new Date().getFullYear()}-${userInfos?.firstname}-${userInfos?.lastname}`,
+            orderStatus: OrderEnum.PENDING,
+            orderType: "Legalization",
+            userId: userId,
+          };
+
+          return PaymentService.order(payload);
+        } else {
+          throw new Error("Failed to add legalization.");
+        }
+      })
+      .then((orderResponse) => {
+        if (orderResponse.status === 201) {
+          handlePay();
+        } else {
+          throw new Error("Failed to create order.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
         setIsLoading(false);
+        enqueueSnackbar("Une erreur est survenue lors du traitement de votre demande", {
+          variant: "error",
+        });
       });
   };
+
+
+
 
   return (
     <Grid container spacing={1} sx={{ position: 'relative' }}>
@@ -193,7 +260,7 @@ function Payments(props: PaymentsProps) {
         <PaymentSummary
           ref={buttonRef}
           isLoading={isLoading}
-          onPay={handlePay}
+          onPay={orderProcess}
           isExtract={isExtract as boolean}
           totalPaid={amount}
           commissionCosts={totalAmountOfDocument().commissionCosts}

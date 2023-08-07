@@ -2,6 +2,7 @@
 import ScrollTop from './components/ScrollTop';
 import Routes from './routes';
 import ThemeCustomization from './theme';
+import { SnackbarProvider } from "notistack";
 
 
 
@@ -11,12 +12,16 @@ import ThemeCustomization from './theme';
 function App() {
 
   return (
-
-      <ThemeCustomization>
-       <ScrollTop>
-            <Routes/>
-       </ScrollTop>
-    </ThemeCustomization>
+    <SnackbarProvider
+      autoHideDuration={3000}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+    >
+        <ThemeCustomization>
+         <ScrollTop>
+              <Routes/>
+         </ScrollTop>
+      </ThemeCustomization>
+    </SnackbarProvider>
   )
 }
 

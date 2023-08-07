@@ -1,9 +1,14 @@
 import PaymentParamsTypes from '../../types/PaymentParamsTypes';
-import { paymentUrl } from '../index';
+import { orderUrls, paymentUrl } from "../index";
+import OrderPayloadTypes from "../../types/OrderPayloadTypes";
 
 class PaymentService {
-  static async buy(params: PaymentParamsTypes) {
-    return await paymentUrl.buy(params);
+  static buy(params: PaymentParamsTypes) {
+    return  paymentUrl.buy(params);
+  }
+
+  static async order(params: OrderPayloadTypes) {
+    return  orderUrls.addOrder(params);
   }
 }
 
