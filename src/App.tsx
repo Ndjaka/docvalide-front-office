@@ -17,9 +17,7 @@ function App() {
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
     >
         <ThemeCustomization>
-         <ScrollTop>
-              <Routes/>
-         </ScrollTop>
+          <Routes/>
       </ThemeCustomization>
     </SnackbarProvider>
   )

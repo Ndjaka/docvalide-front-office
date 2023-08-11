@@ -3,10 +3,15 @@ import { get, post } from "./base";
 import { LegalizationRequest } from "../types/LegalizationPayloadTypes";
 import OrderPayloadTypes from "../types/OrderPayloadTypes";
 import UserPayloadTypes from "../types/UserPayloadTypes";
+import CriminalRecordPayloadTypes from "../types/CriminalRecordPayloadTypes";
+
 
 const PAYMENT_URL = 'https://www.my-dohone.com/dohone/pay';
-const API_URL = import.meta.env.VITE_API_URL as string;
 
+const environment =import.meta.env.MODE as string;
+const production = import.meta.env.VITE_API_URL_PROD as string;
+const development = import.meta.env.VITE_API_URL as string
+const API_URL = environment === 'production' ? production : production;
 
 
  const paymentUrl = {
@@ -34,9 +39,15 @@ const API_URL = import.meta.env.VITE_API_URL as string;
 
 const userUrls = {
     addUser: (params: UserPayloadTypes) => {
-        return post(`${API_URL}/user?`, params);
+        return post(`${API_URL}/user`, params);
     }
 
  };
 
- export { paymentUrl , legalizationUrls , orderUrls, userUrls};
+const criminalRecordUrls = {
+    addCriminalRecord: (params: CriminalRecordPayloadTypes) => {
+        return post(`${API_URL}/criminalrecord`, params);
+    }
+}
+
+ export { paymentUrl , legalizationUrls , orderUrls, userUrls , criminalRecordUrls};

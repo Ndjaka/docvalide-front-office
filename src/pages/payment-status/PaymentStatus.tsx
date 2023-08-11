@@ -1,16 +1,20 @@
 // @flow 
 import * as React from "react";
 import { Container } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Status, { statusType } from "./Status";
+import { useEffect } from "react";
 
 interface PaymentStatusProps {
 }
 
 const PaymentStatus = (props: PaymentStatusProps) => {
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const status = searchParams.get("status");
+  // const rI = searchParams.get("rI");
 
-  const {status} = useParams();
 
   return (
     <Container>

@@ -14,7 +14,7 @@ interface PaymentParamsTypes {
   notifyPage?: string; // Automatic notification address for your site in the event of successful payment (optional)
   cancelPage: string; // Automatic notification address for your site in the event of failed payment (optional)
   motif: string; // The reason for the payment (optional)
-
+  rI?: string; // The invoice number (optional)
 }
 
 export default PaymentParamsTypes;

@@ -43,7 +43,10 @@ function MyDropzone(props : MyDropzoneProps ) {
             maxFiles={1}
             multiple={false}
             onDrop={(acceptedFiles) => addLegalization(acceptedFiles[0])}
-            accept={{ "application/pdf": ['.pdf'] }}
+            accept={{
+              "application/pdf": ['.pdf'],
+              "image/jpeg": ['.jpg', '.jpeg']
+        }}
         >
             {({getRootProps, getInputProps}) => (
                 <Box {...getRootProps({className: 'dropzone'})}
@@ -54,7 +57,7 @@ function MyDropzone(props : MyDropzoneProps ) {
                          display: 'flex',
                          placeItems: 'center',
                          placeContent: 'center',
-                         border:`3px dashed ${color}`,
+                            border:`3px dashed ${color}`,
                          background: 'rgba(71, 120, 229, 0.07)'
                      }}>
                     <input {...getInputProps()} />
@@ -90,6 +93,14 @@ function MyDropzone(props : MyDropzoneProps ) {
                         >
                             Cliquez pour ajouter votre document.
                         </Typography>
+                      <Typography
+                        textAlign={"center"}
+                        my={'9px'}
+                        variant={"overline"}
+                        color={color}
+                      >
+                        PDF et JPG uniquement.
+                      </Typography>
 
                     </Box>
                 </Box>

@@ -274,7 +274,7 @@ const initAllData = () => {
           <ReactSwipableView
             disabled={true}
             index={activeStep.index - 1}
-            style={{
+            slideStyle={{
               height: '392px',
             }}
           >

@@ -18,6 +18,9 @@ import { AxiosResponse } from 'axios';
 import OrderPayloadTypes from '../../../../types/OrderPayloadTypes';
 import OrderEnum from '../../../../enums/OrderEnum';
 import { useSnackbar } from "notistack";
+import CriminalRecordPayloadTypes from "../../../../types/CriminalRecordPayloadTypes";
+import CriminalRecordService from "../../../../api/services/CriminalRecordService";
+import CriminalRecordEnum from "../../../../enums/CriminalRecordEnum";
 
 interface PaymentsProps {
   buttonRef?: React.Ref<HTMLButtonElement>;
@@ -33,6 +36,7 @@ function Payments(props: PaymentsProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   const isTest = useTestPayments();
   const {enqueueSnackbar} = useSnackbar();
+
 
   /**
    * Reduce the quantity of the document
@@ -75,6 +79,16 @@ function Payments(props: PaymentsProps) {
     [payments]
   );
 
+
+  /**
+   *  order number
+   *  @returns {string} - The order number.
+   */
+  const orderNumber = useMemo(() => {
+    return `DOCVALIDE-${new Date().getFullYear()}-${userInfos?.firstname}-${userInfos?.lastname}`
+  }, [userInfos]);
+
+
   /**
    * Calculate the total amount of the document
    * @returns {totalAmount : number , commissionCosts : number}
@@ -108,7 +122,9 @@ function Payments(props: PaymentsProps) {
     }
   }, [payments]);
 
-
+  /**
+   * Calculate the total amount of the document
+   */
   const amount = useMemo(() => {
     return (isExtract as boolean)
       ? (computePrice(
@@ -118,9 +134,23 @@ function Payments(props: PaymentsProps) {
       : totalAmountOfDocument().totalAmount as number;
   }, [payments,userInfos, isExtract]);
 
+
+  const rmt = isTest ? 100 : amount;
+
   /**
-   * Handles the payment of the documents
+   * Check the environment page
+   * @returns {string} - The environment page.
    */
+  const checkEnvPage = () => {
+    const viteEnv = import.meta.env.MODE;
+    const baseUrl = isTest ? 'https://test.docvalide.com/' : 'https://app.docvalide.com/';
+
+    if (viteEnv === 'development') {
+      return 'http://localhost:5173/';
+    }
+
+    return baseUrl;
+  };
 
   const handlePay = () => {
     const VITE_MARCHAND_CODE = import.meta.env.VITE_MARCHAND_CODE as string;
@@ -129,22 +159,24 @@ function Payments(props: PaymentsProps) {
       rN: `${userInfos?.firstname || ''} ${userInfos?.lastname || ''}`,
       rT: userInfos?.phoneNumber as string,
       rE: userInfos?.email as string,
-       rMt: isTest ? 100 : amount,
+       rMt: rmt,
       rDvs: 'XAF',
       source: 'DOCVALIDE',
-      endPage: 'http://localhost:5173/payment-status?status=success',
-      notifyPage: 'http://localhost:5173/payment-status?status=notify',
-      cancelPage: 'http://localhost:5173/payment-status?status=cancel',
+      endPage: `${checkEnvPage()}payment-status?status=success` ,
+      notifyPage: `${checkEnvPage()}payment-status?status=notify`,
+      cancelPage: `${checkEnvPage()}payment-status?status=cancel`,
       motif: userInfos?.motif as string,
       cmd: 'start',
       rH: VITE_MARCHAND_CODE,
-      rOnly: '1,2,3,5',
+      rI: orderNumber,
     };
 
     PaymentService.buy(params)
       .then((res) => {
         if (res.status === 200) {
            document.location.replace(res.config.url as string)
+        }else{
+          throw new Error("Failed to pay");
         }
       })
   };
@@ -160,38 +192,56 @@ function Payments(props: PaymentsProps) {
     });
   }, [payments]);
 
+  console.log('legalizationDocs', legalizationDocs);
   const orderProcess = () => {
     setIsLoading(true);
     let userId: any;
     
     UserService.addUser(userInfos as UserPayloadTypes)
       .then((userResponse) => {
-        console.log("userResponse", userResponse);
         if (userResponse.status === 201) {
            userId = userResponse?.data.data.id;
 
-          const payload: LegalizationRequest = {
-            receiptMoment: userInfos?.receiptMoment as string,
-            motif: userInfos?.motif as string,
-            quantity: payments.reduce(
-              (acc, curr) => acc + (curr?.quantity as number),
-              0
-            ),
-            userId: userId,
-            legalizationDocs,
-          };
+          if (!isExtract) {
+            const payload: LegalizationRequest = {
+              receiptMoment: userInfos?.receiptMoment as string,
+              motif: userInfos?.motif as string,
+              quantity: payments.reduce(
+                (acc, curr) => acc + (curr?.quantity as number),
+                0
+              ),
+              userId: userId,
+              legalizationDocs,
+            };
 
-          return LegalizationService.addLegalization(payload);
+            return LegalizationService.addLegalization(payload);
+
+          }else{
+
+            const payload: CriminalRecordPayloadTypes = {
+              birthDepartment: userInfos?.birth_department as string,
+              fileUrl: {
+                fileName: legalizationDocs[0].fileName,
+                backUrl: legalizationDocs.find((item) => item.designation === CriminalRecordEnum.CNI_RECTO)?.fileUrl as string,
+                frontUrl: legalizationDocs.find((item) => item.designation === CriminalRecordEnum.CNI_VERSO)?.fileUrl as string,
+              },
+              motherName: userInfos?.mother_name as string,
+              userId
+            }
+
+            return CriminalRecordService.addCriminalRecord(payload);
+          }
+
         } else {
           throw new Error("Failed to add user.");
         }
       })
-      .then((legalizationResponse) => {
-        if (legalizationResponse.status === 201) {
+      .then((response) => {
+        if (response.status === 201) {
 
           const payload: OrderPayloadTypes = {
-            orderAmount: amount,
-            orderNumber: `DOCVALIDE-${new Date().getFullYear()}-${userInfos?.firstname}-${userInfos?.lastname}`,
+            orderAmount: rmt,
+            orderNumber: orderNumber,
             orderStatus: OrderEnum.PENDING,
             orderType: "Legalization",
             userId: userId,

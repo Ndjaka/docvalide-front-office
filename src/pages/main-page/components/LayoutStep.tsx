@@ -112,7 +112,7 @@ function LayoutStep(props: LayoutStepProps) {
           paddingBottom: '10px',
           border: `3px solid ${palette?.primary?.main}`,
           width: '100%',
-          height: '590px',
+          height: '588px',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -120,7 +120,7 @@ function LayoutStep(props: LayoutStepProps) {
         <StepHeader title={header.name} start={header.start} end={header.end} />
         <Box
           sx={{
-            overflowY: 'auto',
+            // overflowY: 'auto',
             // height: '388px',
             '&::-webkit-scrollbar': {
               width: '8px',
