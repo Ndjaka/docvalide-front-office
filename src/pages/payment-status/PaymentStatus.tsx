@@ -1,9 +1,8 @@
 // @flow 
 import * as React from "react";
 import { Container } from "@mui/material";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Status, { statusType } from "./Status";
-import { useEffect } from "react";
 
 interface PaymentStatusProps {
 }

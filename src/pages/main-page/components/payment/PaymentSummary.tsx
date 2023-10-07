@@ -92,9 +92,13 @@ const  PaymentSummary = forwardRef<HTMLButtonElement, PaymentSummaryProps>((prop
                     onClick={onPay}
                     variant="contained"
                     color="primary"
+                    sx={{
+                      lineHeight: '1.5',
+                      py: '24px',
+                    }}
                     fullWidth
                 >
-                    Payer
+                  Choisir un moyen de paiement
                 </LoadingButton>
         </Box>
     );

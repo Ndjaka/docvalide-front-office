@@ -1,7 +1,8 @@
 import OrderEnum from "../enums/OrderEnum";
+import OrderTypeEnum from "../enums/OrderTypeEnum";
 
 interface OrderPayloadTypes {
-  orderType?: 'CriminalRecord' | 'Legalization' ;
+  orderType :   OrderTypeEnum ;
   orderStatus: OrderEnum;
   orderAmount: number;
   orderNumber: string;

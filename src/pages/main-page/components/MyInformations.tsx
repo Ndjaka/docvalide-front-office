@@ -228,7 +228,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                     xs={12}
                     margin={'dense'}
                     size={'small'}
-                    label={'Période de réception des documents'}
+                    label={'Moments de récupération des originaux'}
                   />
                   )
                 }

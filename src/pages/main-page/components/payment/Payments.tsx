@@ -21,6 +21,7 @@ import { useSnackbar } from "notistack";
 import CriminalRecordPayloadTypes from "../../../../types/CriminalRecordPayloadTypes";
 import CriminalRecordService from "../../../../api/services/CriminalRecordService";
 import CriminalRecordEnum from "../../../../enums/CriminalRecordEnum";
+import OrderTypeEnum from "../../../../enums/OrderTypeEnum";
 
 interface PaymentsProps {
   buttonRef?: React.Ref<HTMLButtonElement>;
@@ -243,7 +244,7 @@ function Payments(props: PaymentsProps) {
             orderAmount: rmt,
             orderNumber: orderNumber,
             orderStatus: OrderEnum.PENDING,
-            orderType: "Legalization",
+            orderType: !isExtract ? OrderTypeEnum.LEGALIZATION : OrderTypeEnum.CRIMINAL_RECORD,
             userId: userId,
           };
 

@@ -7,11 +7,14 @@ import CriminalRecordPayloadTypes from "../types/CriminalRecordPayloadTypes";
 
 
 const PAYMENT_URL = 'https://www.my-dohone.com/dohone/pay';
+const checkEnv = document.location.href.includes("localhost") || document.location.href.includes("test");
 
 const environment =import.meta.env.MODE as string;
-const production = import.meta.env.VITE_API_URL_PROD as string;
+const production_test = import.meta.env.VITE_API_URL_TEST as string;
+const production_prod = import.meta.env.VITE_API_URL_PROD as string;
 const development = import.meta.env.VITE_API_URL as string
-const API_URL = environment === 'production' ? production : production;
+// check if we are in production or development
+const API_URL = environment === 'production' ? ( checkEnv ? production_test : production_prod) : development;
 
 
  const paymentUrl = {

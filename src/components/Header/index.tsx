@@ -1,12 +1,8 @@
 import React from 'react';
-import {AppBar, Avatar, Box, Button, Container, Hidden, IconButton, Toolbar} from "@mui/material";
+import {AppBar, Box, Container, Hidden, IconButton, Toolbar} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import Navigation from "./navigation";
 import Logo from "./logo";
-import NavItem from "./nav-item";
-import {deepOrange} from "@mui/material/colors";
-
-
 
 
 function Header() {
@@ -47,7 +43,7 @@ function Header() {
                                 </IconButton>
                             </Hidden>
                             <Logo/>
-                            <Hidden mdDown>
+                           {/* <Hidden mdDown>
                                 <Box sx={{display: 'flex'}}>
                                     <NavItem/>
                                 </Box>
@@ -63,7 +59,7 @@ function Header() {
                                         fontSize: "small"
                                     }}>NE</Avatar>
                                 </Box>
-                            </Hidden>
+                            </Hidden>*/}
                         </Box>
                     </Container>
                 </Toolbar>

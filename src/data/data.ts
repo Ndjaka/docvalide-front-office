@@ -68,7 +68,7 @@ const choiceDatas  = [
         id: 10,
         designation: 'Certificat de nationalité',
         price: 3500,
-        type: 'ATTESTATION',
+        type: 'CERTIFICATE',
         selected:false
     },
     {
