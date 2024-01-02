@@ -90,8 +90,11 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
             <Form
               onSubmit={(e) => {
                 handleSubmit(e);
-                Object.keys(initialValues).forEach((field) => { setFieldTouched(field, true); });
+                Object.keys(initialValues).forEach((field) => {
+                  setFieldTouched(field, true);
+                });
               }}
+              placeholder={undefined}
             >
               <Grid container spacing={2}>
                 <FormikTextField
@@ -200,9 +203,8 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                     label={'Motif'}
                   />
                 )}
-                {
-                  choiceType === ChoiceEnum.Legalization &&
-                  (<FormikSelectField
+                {choiceType === ChoiceEnum.Legalization && (
+                  <FormikSelectField
                     name={'moment'}
                     options={[
                       {
@@ -230,8 +232,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                     size={'small'}
                     label={'Moments de récupération des originaux'}
                   />
-                  )
-                }
+                )}
 
                 <FormikAutocomplete
                   options={cities.residence}
