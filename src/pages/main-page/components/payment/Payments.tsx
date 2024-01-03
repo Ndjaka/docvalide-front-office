@@ -10,7 +10,7 @@ import {
 } from '../../../../types/LegalizationPayloadTypes';
 import PaymentService from '../../../../api/services/PaymentService';
 import PaymentParamsTypes from '../../../../types/PaymentParamsTypes';
-import computePrice from '../../../../utils/extractUtils';
+import computePrice from '../../../../utils/computePriceCriminalRecordtUtils';
 import useTestPayments from '../../../../hooks/useTestPayments';
 import LegalizationService from '../../../../api/services/LegalizationService';
 import UserService from '../../../../api/services/UserService';
@@ -22,6 +22,7 @@ import CriminalRecordPayloadTypes from "../../../../types/CriminalRecordPayloadT
 import CriminalRecordService from "../../../../api/services/CriminalRecordService";
 import CriminalRecordEnum from "../../../../enums/CriminalRecordEnum";
 import OrderTypeEnum from "../../../../enums/OrderTypeEnum";
+import { commissionCosts } from "../../../../data/data";
 
 interface PaymentsProps {
   buttonRef?: React.Ref<HTMLButtonElement>;
@@ -96,7 +97,6 @@ function Payments(props: PaymentsProps) {
    *
    */
   const totalAmountOfDocument = useCallback(() => {
-    const COMMISION_COSTS = [3000, 1500];
 
     const totalQuantity = payments.reduce(
       (acc, curr) => acc + (curr?.quantity as number),
@@ -112,16 +112,17 @@ function Payments(props: PaymentsProps) {
 
     if (totalDocument >= 3 || totalQuantity >= 3) {
       return {
-        totalAmount: totalAmount + COMMISION_COSTS[0],
-        commissionCosts: COMMISION_COSTS[0],
+        totalAmount: totalAmount + commissionCosts[0],
+        commissionCosts: commissionCosts[0],
       };
     } else {
       return {
-        totalAmount: totalAmount + COMMISION_COSTS[1],
-        commissionCosts: COMMISION_COSTS[1],
+        totalAmount: totalAmount + commissionCosts[1],
+        commissionCosts: commissionCosts[1],
       };
     }
   }, [payments]);
+
 
   /**
    * Calculate the total amount of the document
@@ -142,18 +143,20 @@ function Payments(props: PaymentsProps) {
    * Check the environment page
    * @returns {string} - The environment page.
    */
-  const checkEnvPage = () => {
+  const checkEnvPage = () : string => {
     const viteEnv = import.meta.env.MODE;
     const baseUrl = isTest ? 'https://test.docvalide.com/' : 'https://app.docvalide.com/';
 
     if (viteEnv === 'development') {
-      return 'http://localhost:5173/';
+      const loc = window.location;
+
+      return loc.origin + '/';
     }
 
     return baseUrl;
   };
 
-  const handlePay = () => {
+  const handlePay = () : void => {
     const VITE_MARCHAND_CODE = import.meta.env.VITE_MARCHAND_CODE as string;
 
     const params: PaymentParamsTypes = {
@@ -193,7 +196,6 @@ function Payments(props: PaymentsProps) {
     });
   }, [payments]);
 
-  console.log('legalizationDocs', legalizationDocs);
   const orderProcess = () => {
     setIsLoading(true);
     let userId: any;
@@ -261,7 +263,6 @@ function Payments(props: PaymentsProps) {
         }
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
         enqueueSnackbar("Une erreur est survenue lors du traitement de votre demande", {
           variant: "error",

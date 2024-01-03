@@ -1,9 +1,8 @@
-
-import ScrollTop from './components/ScrollTop';
 import Routes from './routes';
 import ThemeCustomization from './theme';
 import { SnackbarProvider } from "notistack";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
@@ -11,7 +10,18 @@ import { SnackbarProvider } from "notistack";
 
 function App() {
 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: false,
+        staleTime: 1000 * 60 * 5,
+      }
+    },
+  });
+
   return (
+    <QueryClientProvider client={queryClient}>
     <SnackbarProvider
       autoHideDuration={3000}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -20,6 +30,8 @@ function App() {
           <Routes/>
       </ThemeCustomization>
     </SnackbarProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }
 

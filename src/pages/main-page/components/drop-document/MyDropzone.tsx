@@ -45,10 +45,12 @@ function MyDropzone(props : MyDropzoneProps ) {
             onDrop={(acceptedFiles) => addLegalization(acceptedFiles[0])}
             accept={{
               "application/pdf": ['.pdf'],
-              "image/jpeg": ['.jpg', '.jpeg']
+              "image/jpeg": ['.jpg', '.jpeg'],
+              "image/png": ['.png'],
+
         }}
         >
-            {({getRootProps, getInputProps}) => (
+            {({getRootProps, getInputProps, acceptedFiles}) => (
                 <Box {...getRootProps({className: 'dropzone'})}
                      component={"div"}
                      sx={{
@@ -96,10 +98,10 @@ function MyDropzone(props : MyDropzoneProps ) {
                       <Typography
                         textAlign={"center"}
                         my={'9px'}
-                        variant={"overline"}
+                        variant={"caption"}
                         color={color}
                       >
-                        PDF et JPG uniquement.
+                        {acceptedFiles.length > 0 ? acceptedFiles[0].name : "PDF et JPG uniquement."}
                       </Typography>
 
                     </Box>

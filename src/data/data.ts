@@ -163,4 +163,6 @@ const cniData = [
     }
 ]
 
-export { choiceDatas, legalizationData , extractData , cniData }
+const commissionCosts = [ 3000 , 2000 ];
+
+export { choiceDatas, legalizationData , extractData , cniData, commissionCosts }

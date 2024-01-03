@@ -57,7 +57,6 @@ function MyChoices(props:MyChoicesProps) {
                               lg={4}
                               key={value.id} >
                             <MyChoicesItems
-
                                 onChangeItem={() => handleChangeItem(value)}
                                 designation={value?.designation}
                                 isSelected={value?.selected}

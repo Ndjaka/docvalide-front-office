@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   Autocomplete,
-  AutocompleteFreeSoloValueMapping,
+  AutocompleteFreeSoloValueMapping, CircularProgress,
   darken,
   lighten,
   TextField,
@@ -14,7 +14,6 @@ import {
 import { useField } from 'formik';
 import { ChipTypeMap } from '@mui/material/Chip';
 import { UseAutocompleteProps } from '@mui/base';
-import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import palette from '../../theme/palette';
 
@@ -39,6 +38,7 @@ export interface FormikAutocompleteProps<
   ) => void;
   placeholder?: string;
   groupBy?: (option: T) => string;
+  onPaginateAutoComplete?: () => void;
 }
 
 export default function FormikAutocomplete<
@@ -116,6 +116,15 @@ export default function FormikAutocomplete<
                 color: palette?.primary?.main,
               },
             }}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {props.loading ? <CircularProgress color={"primary"}  size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
           />
         )}
         renderGroup={(params) => (
@@ -126,6 +135,7 @@ export default function FormikAutocomplete<
         )}
         value={field.value || (props.multiple ? [] : null)}
         onInputChange={(event, value, reason) => {
+          props.onInputChange?.(event, value, reason);
           if (props.freeSolo) {
             helpers.setValue(value);
           }

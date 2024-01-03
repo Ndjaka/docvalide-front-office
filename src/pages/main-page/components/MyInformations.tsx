@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, useTheme } from "@mui/material";
 import { Form, Formik } from "formik";
 import React, { forwardRef } from "react";
 import * as Yup from "yup";
@@ -12,6 +12,10 @@ import departments from "../../../data/department.json";
 import generateOptions from "../../../utils/regionUtils";
 import dayjs, { Dayjs } from "dayjs";
 import ChoiceEnum from "../../../enums/ChoiceEnum";
+import useFeeCriminalRecord from '../../../hooks/useFeeCriminalRecord';
+import { FeeCriminalRecords } from "../../../types/FeeCriminalRecordTypes";
+import removeDuplicates from "../../../utils/feeCriminalRecordUtils";
+import removeDuplicateResidences from "../../../utils/feeCriminalRecordUtils";
 
 interface MyInformationsProps {
     onSubmit: (values:any) => void;
@@ -41,8 +45,19 @@ export interface UserValues  {
 const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props,ref) => {
 
     const { choiceType , onSubmit } = props;
+    const [townOfResidence, setTownOfResidence] = React.useState<string>('');
 
-    const initialValues : UserValues = {
+
+    const {data,isLoading } = useFeeCriminalRecord({ tribunal: '', city: townOfResidence });
+
+  const cities = (removeDuplicateResidences(data?.data?.results as FeeCriminalRecords[]))
+    .map(({ id, residence }: FeeCriminalRecords) => ({
+      id,
+      label: residence,
+    }));
+
+
+  const initialValues : UserValues = {
         full_name: '',
         email: '',
         phone: '',
@@ -63,7 +78,6 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
 
     }
 
-
     const validationSchema = {
         full_name: Yup.string().max(255).required('Le nom et le prénom doivent être renseigné'), // for extract and legalization
         email: Yup.string().email("L'adresse email doit être valide").required("L'adresse email doit être renseigné"), // for extract and legalization
@@ -74,7 +88,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
         birth_date: choiceType === ChoiceEnum.Legalization ? Yup.string().optional() : Yup.string().max(255).required("La date de naissance doit être renseigné"), // for extract
         birth_department: choiceType === ChoiceEnum.Legalization ? Yup.object().optional() : Yup.object().required("Le département de naissance doit être renseigné"), // for extract
         father_name: choiceType === ChoiceEnum.Extract ? Yup.string().max(255).required("Le nom du père doit être renseigné") : Yup.string().optional() , // for extract and legalization
-        mother_name: choiceType === ChoiceEnum.Extract ? Yup.string().max(255).required("Le nom de la mère doit être renseigné") : Yup.string().optional() , // for extract and legalization
+        mother_name: choiceType === ChoiceEnum.Extract ? Yup.string().max(255).required("Le nom de la mère doit être renseigné") : Yup.string().optional()  // for extract and legalization
     }
 
     return (
@@ -88,13 +102,13 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
         >
           {({ setFieldTouched, handleSubmit }) => (
             <Form
+              placeholder={''}
               onSubmit={(e) => {
                 handleSubmit(e);
                 Object.keys(initialValues).forEach((field) => {
                   setFieldTouched(field, true);
                 });
               }}
-              placeholder={undefined}
             >
               <Grid container spacing={2}>
                 <FormikTextField
@@ -235,9 +249,11 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                 )}
 
                 <FormikAutocomplete
-                  options={cities.residence}
+                  onInputChange={(e,value) => setTownOfResidence(value)}
+                  loading={isLoading}
+                  options={cities}
                   label={'Ville de résidence'}
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option ) => option.label }
                   isOptionEqualToValue={(option, value) =>
                     option.id === value?.id
                   }

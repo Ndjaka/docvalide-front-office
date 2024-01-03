@@ -210,7 +210,7 @@ const Home = () => {
     [activeStep.choiceTitle, handleAddDocument, paymentsData]
   );
 
-const initAllData = () => {
+  const initAllData = () => {
   setMyDocuments([]);
   setPaymentsData([]);
   setUserInformation(null);

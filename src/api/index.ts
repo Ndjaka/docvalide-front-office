@@ -4,6 +4,7 @@ import { LegalizationRequest } from "../types/LegalizationPayloadTypes";
 import OrderPayloadTypes from "../types/OrderPayloadTypes";
 import UserPayloadTypes from "../types/UserPayloadTypes";
 import CriminalRecordPayloadTypes from "../types/CriminalRecordPayloadTypes";
+import { FeeCriminalRecordParams } from "../types/FeeCriminalRecordTypes";
 
 
 const PAYMENT_URL = 'https://www.my-dohone.com/dohone/pay';
@@ -53,4 +54,10 @@ const criminalRecordUrls = {
     }
 }
 
- export { paymentUrl , legalizationUrls , orderUrls, userUrls , criminalRecordUrls};
+const feeCriminalRecordUrls = {
+    getFeeCriminalRecord: (params : FeeCriminalRecordParams) => {
+        return get(`${API_URL}/feeCriminalRecord?city=${params.city || ''}&tribunal=${params.tribunal || ''}&page=0&resultsPerPage=0&withLimit=false`);
+    }
+}
+
+ export { paymentUrl , legalizationUrls , orderUrls, userUrls , criminalRecordUrls, feeCriminalRecordUrls};
