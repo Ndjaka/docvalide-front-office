@@ -4,17 +4,20 @@ function removeDuplicateResidences(records: FeeCriminalRecords[]): FeeCriminalRe
   const seenResidences = new Set<string>();
   const uniqueRecords: FeeCriminalRecords[] = [];
 
-  if (records){
+  if (records) {
     for (const record of records) {
-      if (!seenResidences.has(record.residence)) {
-        seenResidences.add(record.residence);
+
+      const residenceKey = record.residence.toLowerCase().trim();
+
+      if (!seenResidences.has(residenceKey)) {
+        seenResidences.add(residenceKey);
         uniqueRecords.push(record);
       }
     }
   }
 
-
   return uniqueRecords;
 }
+
 
 export default removeDuplicateResidences;

@@ -10,7 +10,6 @@ interface User{
   roles?: string;
   occupation?: string;
   motif: string;
-  receiptMoment: string;
   birth_date: string,
   birth_department: string,
   father_name: string,

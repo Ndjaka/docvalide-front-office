@@ -12,6 +12,7 @@ export interface FeeCriminalRecords{
   tribunal:  string;
   fees:      number;
   status:    boolean;
+  region:    string;
 }
 
 export interface FeeCriminalRecordParams{

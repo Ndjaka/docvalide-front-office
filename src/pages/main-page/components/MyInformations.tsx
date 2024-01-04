@@ -1,95 +1,122 @@
-import { Box, Grid, useTheme } from "@mui/material";
-import { Form, Formik } from "formik";
-import React, { forwardRef } from "react";
-import * as Yup from "yup";
-import { FormikTextField } from "../../../components/Form/FormikTextField";
-import FormikTelInput from "../../../components/Form/FormikTelInput";
-import FormikSelectField from "../../../components/Form/FormikSelectField";
-import FormikDateInput from "../../../components/Form/FormikDateInput";
-import FormikAutocomplete from "../../../components/Form/FormikAutocomplete";
-import cities from "../../../data/cities.json";
-import departments from "../../../data/department.json";
-import generateOptions from "../../../utils/regionUtils";
-import dayjs, { Dayjs } from "dayjs";
-import ChoiceEnum from "../../../enums/ChoiceEnum";
+import { Box, Grid, useTheme } from '@mui/material';
+import { Form, Formik } from 'formik';
+import React, { forwardRef } from 'react';
+import * as Yup from 'yup';
+import { FormikTextField } from '../../../components/Form/FormikTextField';
+import FormikTelInput from '../../../components/Form/FormikTelInput';
+import FormikSelectField from '../../../components/Form/FormikSelectField';
+import FormikDateInput from '../../../components/Form/FormikDateInput';
+import FormikAutocomplete from '../../../components/Form/FormikAutocomplete';
+import dayjs, { Dayjs } from 'dayjs';
+import ChoiceEnum from '../../../enums/ChoiceEnum';
 import useFeeCriminalRecord from '../../../hooks/useFeeCriminalRecord';
-import { FeeCriminalRecords } from "../../../types/FeeCriminalRecordTypes";
-import removeDuplicates from "../../../utils/feeCriminalRecordUtils";
-import removeDuplicateResidences from "../../../utils/feeCriminalRecordUtils";
+import { FeeCriminalRecords } from '../../../types/FeeCriminalRecordTypes';
+import removeDuplicateResidences from '../../../utils/feeCriminalRecordUtils';
+import { generateOptions, groupRecordsByRegion } from "../../../utils/regionUtils";
 
 interface MyInformationsProps {
-    onSubmit: (values:any) => void;
-    choiceType: ChoiceEnum,
+  onSubmit: (values: any) => void;
+  choiceType: ChoiceEnum;
 }
 
-export interface UserValues  {
-  full_name?: string,
-  email?: string,
-  phone?: string,
-  reason?: string,
-  moment?: string,
+export interface UserValues {
+  full_name?: string;
+  email?: string;
+  phone?: string;
+  reason?: string;
   townOfResidence?: {
-    id: string,
-    label: string,
-  },
-  birth_date: Dayjs,
+    id: string;
+    label: string;
+  };
+  birth_date: Dayjs;
   birth_department: {
-    id: string,
-    label: string,
-    region: string
-  },
-  father_name: string,
-  mother_name: string
+    id: string;
+    label: string;
+    region: string;
+  };
+  father_name: string;
+  mother_name: string;
 }
 
-const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props,ref) => {
+const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>(
+  (props, ref) => {
+    const { choiceType, onSubmit } = props;
+    const isExtract = choiceType === ChoiceEnum.Extract;
 
-    const { choiceType , onSubmit } = props;
-    const [townOfResidence, setTownOfResidence] = React.useState<string>('');
+    const { data, isLoading } = useFeeCriminalRecord({
+      tribunal: '',
+      city: '',
+    });
 
-
-    const {data,isLoading } = useFeeCriminalRecord({ tribunal: '', city: townOfResidence });
-
-  const cities = (removeDuplicateResidences(data?.data?.results as FeeCriminalRecords[]))
-    .map(({ id, residence }: FeeCriminalRecords) => ({
-      id,
+    const cities = removeDuplicateResidences(
+      data?.data?.results as FeeCriminalRecords[]
+    ).filter(({ status }: FeeCriminalRecords) => status)
+      .map(({ residence }: FeeCriminalRecords) => ({
+      id: residence,
       label: residence,
     }));
 
-
-  const initialValues : UserValues = {
-        full_name: '',
-        email: '',
-        phone: '',
-        reason: '',
-        moment: '',
-        father_name: '',
-        mother_name: '',
-        birth_date:  dayjs(new Date()),
-        birth_department: {
-          id: '',
-          label: '',
-          region: ''
-        },
-        townOfResidence: {
-          id: '',
-          label: '',
-        },
-
-    }
+    const departments = generateOptions(groupRecordsByRegion(data?.data?.results as FeeCriminalRecords[]));
+    console.log(departments);
+    const initialValues: UserValues = {
+      full_name: '',
+      email: '',
+      phone: '',
+      reason: '',
+      father_name: '',
+      mother_name: '',
+      birth_date: dayjs(new Date()),
+      birth_department: {
+        id: '',
+        label: '',
+        region: '',
+      },
+      townOfResidence: {
+        id: '',
+        label: '',
+      },
+    };
 
     const validationSchema = {
-        full_name: Yup.string().max(255).required('Le nom et le prénom doivent être renseigné'), // for extract and legalization
-        email: Yup.string().email("L'adresse email doit être valide").required("L'adresse email doit être renseigné"), // for extract and legalization
-        phone: Yup.string().max(255).required("Le numéro de téléphone doit être renseigné"), // for extract and legalization
-        townOfResidence: Yup.object().required("Le ville de résidence doit être renseigné"), // for extract and legalization
-        reason: choiceType === ChoiceEnum.Extract ? Yup.string().optional() : Yup.string().max(255).required("Le motif doit être renseigné"), // for legalization
-        moment: choiceType === ChoiceEnum.Extract ? Yup.string().optional() : Yup.string().max(255).required("Le moment de reception doit être renseigné"),
-        birth_date: choiceType === ChoiceEnum.Legalization ? Yup.string().optional() : Yup.string().max(255).required("La date de naissance doit être renseigné"), // for extract
-        birth_department: choiceType === ChoiceEnum.Legalization ? Yup.object().optional() : Yup.object().required("Le département de naissance doit être renseigné"), // for extract
-        father_name: choiceType === ChoiceEnum.Extract ? Yup.string().max(255).required("Le nom du père doit être renseigné") : Yup.string().optional() , // for extract and legalization
-        mother_name: choiceType === ChoiceEnum.Extract ? Yup.string().max(255).required("Le nom de la mère doit être renseigné") : Yup.string().optional()  // for extract and legalization
-    }
+      full_name: Yup.string()
+        .max(255)
+        .required('Le nom et le prénom doivent être renseignés'),
+      email: Yup.string()
+        .email("L'adresse email doit être valide")
+        .required("L'adresse email doit être renseignée"),
+      phone: Yup.string()
+        .max(255)
+        .required('Le numéro de téléphone doit être renseigné'),
+      townOfResidence: Yup.object().required(
+        'La ville de résidence doit être renseignée'
+      ),
+      reason:
+        isExtract
+          ? Yup.string().optional()
+          : Yup.string().max(255).required('Le motif doit être renseigné'),
+      birth_date:
+        !isExtract
+          ? Yup.string().optional()
+          : Yup.string()
+              .max(255)
+              .required('La date de naissance doit être renseignée'),
+      birth_department:
+        !isExtract
+          ? Yup.object().optional()
+          : Yup.object().required(
+              'Le département de naissance doit être renseigné'
+            ),
+      father_name:
+        isExtract
+          ? Yup.string().max(255).required('Le nom du père doit être renseigné')
+          : Yup.string().optional(),
+      mother_name:
+        isExtract
+          ? Yup.string()
+              .max(255)
+              .required('Le nom de la mère doit être renseigné')
+          : Yup.string().optional(),
+    };
 
     return (
       <Box sx={{ marginTop: '16px' }}>
@@ -100,8 +127,10 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
             onSubmit(values);
           }}
         >
-          {({ setFieldTouched, handleSubmit }) => (
-            <Form
+          {({ setFieldTouched, handleSubmit }) => {
+            const breakPoints = !isExtract ? 12 : 6;
+
+            return (<Form
               placeholder={''}
               onSubmit={(e) => {
                 handleSubmit(e);
@@ -112,9 +141,9 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
             >
               <Grid container spacing={2}>
                 <FormikTextField
-                  lg={6}
-                  md={6}
-                  sm={6}
+                  lg={breakPoints}
+                  md={breakPoints}
+                  sm={breakPoints}
                   xs={12}
                   margin={'dense'}
                   size={'small'}
@@ -123,7 +152,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                   name={'full_name'}
                   label={'Nom et Prénom'}
                 />
-                {choiceType === ChoiceEnum.Extract && (
+                {isExtract && (
                   <FormikTextField
                     lg={6}
                     md={6}
@@ -137,7 +166,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                     label={'Nom du père'}
                   />
                 )}
-                {choiceType === ChoiceEnum.Extract && (
+                {isExtract && (
                   <FormikTextField
                     lg={6}
                     md={6}
@@ -175,7 +204,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                   name={'phone'}
                   label={'Téléphone'}
                 />
-                {choiceType === ChoiceEnum.Extract && (
+                {isExtract && (
                   <FormikDateInput
                     lg={6}
                     md={6}
@@ -187,7 +216,7 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                     size={'small'}
                   />
                 )}
-                {choiceType === ChoiceEnum.Legalization && (
+                {!isExtract && (
                   <FormikSelectField
                     name={'reason'}
                     options={[
@@ -217,43 +246,13 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                     label={'Motif'}
                   />
                 )}
-                {choiceType === ChoiceEnum.Legalization && (
-                  <FormikSelectField
-                    name={'moment'}
-                    options={[
-                      {
-                        label: 'Maintenant',
-                        value: 'now',
-                      },
-                      {
-                        label: 'Dans une heure',
-                        value: 'in-one-hour',
-                      },
-                      {
-                        label: 'Demain',
-                        value: 'tomorrow',
-                      },
-                      {
-                        label: 'Dans la semaine',
-                        value: 'in-the-week',
-                      },
-                    ]}
-                    lg={6}
-                    md={6}
-                    sm={6}
-                    xs={12}
-                    margin={'dense'}
-                    size={'small'}
-                    label={'Moments de récupération des originaux'}
-                  />
-                )}
-
+                {/* TODO: uncomment this to enable search by city */}
                 <FormikAutocomplete
-                  onInputChange={(e,value) => setTownOfResidence(value)}
+                  //  onInputChange={(e,value) => setTownOfResidence(value)}
                   loading={isLoading}
                   options={cities}
                   label={'Ville de résidence'}
-                  getOptionLabel={(option ) => option.label }
+                  getOptionLabel={(option) => option.label}
                   isOptionEqualToValue={(option, value) =>
                     option.id === value?.id
                   }
@@ -263,9 +262,9 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
                   xs={12}
                   name={'townOfResidence'}
                 />
-                {choiceType === ChoiceEnum.Extract && (
+                {isExtract && (
                   <FormikAutocomplete
-                    options={generateOptions(departments)}
+                    options={departments}
                     groupBy={(option) => option.region}
                     label={'Département de naissance'}
                     getOptionLabel={(option) => option.label}
@@ -282,11 +281,12 @@ const MyInformations = forwardRef<HTMLButtonElement, MyInformationsProps>((props
 
                 <button ref={ref} type={'submit'} style={{ display: 'none' }} />
               </Grid>
-            </Form>
-          )}
+            </Form>);
+          }}
         </Formik>
       </Box>
     );
-});
+  }
+);
 
 export default React.memo(MyInformations);

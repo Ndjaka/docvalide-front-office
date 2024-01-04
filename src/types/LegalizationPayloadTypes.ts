@@ -1,6 +1,6 @@
 export interface LegalizationRequest {
   motif: string;
-  receiptMoment: string;
+  receiptMoment?: string;
   quantity: number;
   userId?: string;
   legalizationDocs?: LegalizationDocRequest[];

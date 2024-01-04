@@ -165,6 +165,7 @@ const Home = () => {
 
   const handleSubmitInformation = useCallback(
     (values: UserValues) => {
+      console.log(values);
       if (Object.keys(values).length > 0) {
         if (activeStep.choiceTitle === ChoiceEnum.Extract) {
           const cniToDocument = cniData.map((item) => {
@@ -195,8 +196,7 @@ const Home = () => {
           phoneNumber: values.phone as string,
           roles: RolesEnum.USER as string,
           townOfResidence: values.townOfResidence?.id as string,
-          motif: values.reason as string,
-          receiptMoment: values.moment as string,
+          motif: values.reason as string
         });
 
         setActiveStep((prevState) => ({
